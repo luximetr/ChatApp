@@ -2,7 +2,7 @@ import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceTy
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
 import 'package:flutter/material.dart';
 
-import 'PresentationLayer/Screens/Auth/SignIn/SignInScreen.dart';
+import 'PresentationLayer/Screens/Chats/ChatList/ChatListScreen.dart';
 
 final appearance = AppearancesFactory().createAppearance(AppearanceType.light);
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         backgroundColor: appearance.background.primary
       ),
-      home: SignInScreen(),
+      home: ChatListScreen(),
     );
   }
 }

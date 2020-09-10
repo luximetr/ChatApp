@@ -27,6 +27,9 @@ class AppearancesFactory {
           background: Color.fromRGBO(44, 110, 237, 1),
           title: Color.fromRGBO(200, 208, 201, 1)
         )
+      ),
+      navigation: NavigationAppearance(
+        background: Color.fromRGBO(55, 65, 89, 1)
       )
     );
   }
