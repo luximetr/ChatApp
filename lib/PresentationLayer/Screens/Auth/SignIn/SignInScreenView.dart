@@ -1,5 +1,5 @@
 import 'package:chat_app/PresentationLayer/Helpers/Components/TextInput.dart';
-import 'package:chat_app/main.dart';
+import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +66,6 @@ class SignInScreenView extends StatelessWidget {
       ),
       margin: EdgeInsets.only(top: 25, bottom: 25),
     );
-    return FlatButton(onPressed: this.onSignUp, child: Text('Sign Up'));
   }
 
   Widget makeSignInButton(BuildContext context) {

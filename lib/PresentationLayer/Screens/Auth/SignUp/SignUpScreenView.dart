@@ -1,6 +1,6 @@
 
 import 'package:chat_app/PresentationLayer/Helpers/Components/TextInput.dart';
-import 'package:chat_app/main.dart';
+import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -47,6 +47,7 @@ class SignUpScreenView extends StatelessWidget {
       child: TextInput(
         controller: _passwordController,
         placeholder: 'Password',
+        obscureText: true,
       ),
       margin: EdgeInsets.only(top: 20),
     );
@@ -57,6 +58,7 @@ class SignUpScreenView extends StatelessWidget {
       child: TextInput(
         controller: _repeatPasswordController,
         placeholder: 'Repeat Password',
+        obscureText: true,
       ),
       margin: EdgeInsets.only(top: 20),
     );
