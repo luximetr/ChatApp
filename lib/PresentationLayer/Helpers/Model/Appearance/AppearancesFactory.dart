@@ -29,7 +29,7 @@ class AppearancesFactory {
         )
       ),
       navigation: NavigationAppearance(
-        background: Color.fromRGBO(55, 65, 89, 1)
+        background: Color.fromRGBO(41, 47, 67, 1)
       )
     );
   }

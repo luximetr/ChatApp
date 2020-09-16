@@ -22,4 +22,8 @@ class CurrentUserCacheWorker {
     final json = await _storage.getObject(_key);
     return _userJSONConverter.toUser(json);
   }
+
+  Future<void> removeCurrentUser() async {
+    _storage.removeObject(_key);
+  }
 }

@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 
 class SignUpScreenView extends StatelessWidget {
 
+  final _nameController = TextEditingController();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
 
   final VoidCallback onSignIn;
-  final Function(String login, String password, String repeatPassword) onSignUp;
+  final Function(String name, String login, String password, String repeatPassword) onSignUp;
 
   SignUpScreenView({this.onSignIn, this.onSignUp});
 
@@ -20,6 +21,7 @@ class SignUpScreenView extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: Column(children: [
+          _buildNameTextInput(),
           _buildLoginTextInput(),
           _buildPasswordTextInput(),
           _buildRepeatPasswordTextInput(),
@@ -32,13 +34,23 @@ class SignUpScreenView extends StatelessWidget {
     );
   }
 
+  Widget _buildNameTextInput() {
+    return Container(
+      child: TextInput(
+        controller: _nameController,
+        placeholder: 'Name',
+      ),
+      margin: EdgeInsets.only(top: 120),
+    );
+  }
+
   Widget _buildLoginTextInput() {
     return Container(
       child: TextInput(
         controller: _loginController,
         placeholder: 'Login',
       ),
-      margin: EdgeInsets.only(top: 120),
+      margin: EdgeInsets.only(top: 20),
     );
   }
 
@@ -84,6 +96,7 @@ class SignUpScreenView extends StatelessWidget {
 
   void _onSignUpPressed() {
     onSignUp(
+      _nameController.text,
       _loginController.text,
       _passwordController.text,
       _repeatPasswordController.text

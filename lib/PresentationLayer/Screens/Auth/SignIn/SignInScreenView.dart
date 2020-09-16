@@ -11,7 +11,7 @@ class SignInScreenView extends StatelessWidget {
   final Function(String login, String password) onSignIn;
   final VoidCallback onSignUp;
 
-  SignInScreenView(this.onSignIn, this.onSignUp);
+  SignInScreenView({@required this.onSignIn, @required this.onSignUp});
 
   @override
   Widget build(BuildContext context) {

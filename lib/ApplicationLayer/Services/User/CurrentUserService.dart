@@ -17,4 +17,8 @@ class CurrentUserService {
   Future<bool> getHasCurrentUser() async {
     return await getCachedCurrentUser() != null;
   }
+
+  Future<void> removeCurrentUser() async {
+    return _currentUserCacheWorker.removeCurrentUser();
+  }
 }

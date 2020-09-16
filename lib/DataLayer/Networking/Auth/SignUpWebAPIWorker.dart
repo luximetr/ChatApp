@@ -12,7 +12,7 @@ class SignUpWebAPIWorker extends FirebaseWebAPIWorker {
     _collectionReference = firestore.collection('users');
   }
 
-  Future<User> signUp({@required String login, @required String password}) async {
+  Future<User> signUp({@required String name, @required String login, @required String password}) async {
     try {
       await _collectionReference.where('login', isEqualTo: login).get();
       throw Exception('User with this login already exist');
@@ -24,10 +24,11 @@ class SignUpWebAPIWorker extends FirebaseWebAPIWorker {
       final id = newDoc.id;
       await newDoc.set({
         'id': newDoc.id,
+        'name': name,
         'login': login,
         'password': password
       });
-      return User(id: id, name: login);
+      return User(id: id, name: name);
     }
   }
 }

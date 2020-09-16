@@ -9,8 +9,8 @@ class SignUpService {
   final _signUpWebAPIWorker = SignUpWebAPIWorker();
   final _currentUserService = CurrentUserService();
 
-  Future<User> signUp({@required String login, @required String password}) async {
-    final user = await _signUpWebAPIWorker.signUp(login: login, password: password);
+  Future<User> signUp({@required String name, @required String login, @required String password}) async {
+    final user = await _signUpWebAPIWorker.signUp(name: name, login: login, password: password);
     await _currentUserService.saveCurrentUser(user);
     return user;
   }
