@@ -5,23 +5,22 @@ import 'package:chat_app/ModelLayer/Business/User/UserJSONConverter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-class SignInWebAPIWorker extends FirestoreWebAPIWorker {
+class FindUserWebAPIWorker extends FirestoreWebAPIWorker {
 
   CollectionReference _collectionReference;
   UserJSONConverter _userJSONConverter;
 
-  SignInWebAPIWorker() {
+  FindUserWebAPIWorker() {
     _collectionReference = firestore.collection('users');
     _userJSONConverter = UserJSONConverter();
   }
 
-  Future<User> signIn({@required String login, @required String password}) async {
+  Future<User> findUser(String login) {
     return _collectionReference
         .where('login', isEqualTo: login)
-        .where('password', isEqualTo: password)
         .get()
-        .then((value) {
-          final json = value.docs.first.data();
+        .then((snapshot) {
+          final json = snapshot.docs.first.data();
           return _userJSONConverter.toUser(json);
         });
   }

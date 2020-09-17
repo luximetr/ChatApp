@@ -1,7 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FirebaseWebAPIWorker {
+class FirestoreWebAPIWorker {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 }

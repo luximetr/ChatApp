@@ -9,12 +9,14 @@ class TextInput extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final String placeholder;
+  final Widget suffixIcon;
 
   TextInput({
     this.controller,
     this.obscureText = false,
     this.keyboardType,
-    this.placeholder
+    this.placeholder,
+    this.suffixIcon,
   });
 
   @override
@@ -29,6 +31,7 @@ class TextInput extends StatelessWidget {
         filled: true,
         fillColor: appearance.background.secondary,
         labelStyle: TextStyle(color: appearance.text.secondary),
+        suffixIcon: suffixIcon
       ),
     );
   }
