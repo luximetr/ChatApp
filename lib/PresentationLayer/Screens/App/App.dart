@@ -4,7 +4,7 @@ import 'package:chat_app/ApplicationLayer/Services/User/CurrentUserService.dart'
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/SignInScreen.dart';
-import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/ChatListScreen.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:flutter/material.dart';
 
 final appearance = AppearancesFactory().createAppearance(AppearanceType.light);

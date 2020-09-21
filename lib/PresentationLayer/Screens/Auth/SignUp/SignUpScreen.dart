@@ -2,7 +2,7 @@
 import 'package:chat_app/ApplicationLayer/Services/Auth/SignUpService.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/SignUpScreenView.dart';
-import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/ChatListScreen.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

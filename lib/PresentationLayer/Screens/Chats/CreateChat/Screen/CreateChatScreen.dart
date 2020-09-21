@@ -10,7 +10,10 @@ class CreateChatScreen extends StatefulWidget {
 
 class CreateChatScreenState extends State<CreateChatScreen> {
 
+  // Dependencies
   final _findUserService = FindUserService();
+
+  // Data
   User _foundUser;
   bool _isSearchingUser = false;
 
