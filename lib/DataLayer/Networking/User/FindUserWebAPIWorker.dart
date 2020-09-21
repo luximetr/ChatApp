@@ -3,7 +3,6 @@ import 'package:chat_app/DataLayer/Networking/Base/FirestoreWebAPIWorker.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/ModelLayer/Business/User/UserJSONConverter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 class FindUserWebAPIWorker extends FirestoreWebAPIWorker {
 

@@ -6,11 +6,16 @@ class CurrentUserService {
   
   final _currentUserCacheWorker = CurrentUserCacheWorker();
   
-  Future<User> getCachedCurrentUser() {
+  Future<User> getCachedCurrentUser() async {
     return _currentUserCacheWorker.fetchCurrentUser();
   }
 
-  Future<void> saveCurrentUser(User user) {
+  Future<String> getCachedCurrentUserId() async {
+    final user = await getCachedCurrentUser();
+    return user.id;
+  }
+
+  Future<void> saveCurrentUser(User user) async {
     return _currentUserCacheWorker.saveCurrentUser(user);
   }
 

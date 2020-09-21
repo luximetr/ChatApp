@@ -1,15 +1,15 @@
 
+import 'package:chat_app/ApplicationLayer/Services/User/CurrentUserService.dart';
+import 'package:chat_app/DataLayer/Networking/Chat/GetChatListWebAPIWorker.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 
 class ChatListService {
 
+  final _currentUserService = CurrentUserService();
+  final _getChatListWebAPIWorker = GetChatListWebAPIWorker();
+
   Future<List<Chat>> getChatList() async {
-    return Future.delayed(new Duration(seconds: 2), () {
-      return Future.value([
-        Chat(id: 'chat1', name: 'Chat room 1'),
-        Chat(id: 'chat2', name: 'Chat room 2'),
-        Chat(id: 'chat3', name: 'Chat room 3')
-      ]);
-    });
+    final userId = await _currentUserService.getCachedCurrentUserId();
+    return _getChatListWebAPIWorker.getChatList(userId);
   }
 }
