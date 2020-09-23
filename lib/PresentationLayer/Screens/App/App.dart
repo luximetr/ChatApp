@@ -1,6 +1,7 @@
 
 import 'package:chat_app/ApplicationLayer/Services/Start/InitAppService.dart';
 import 'package:chat_app/ApplicationLayer/Services/User/CurrentUserService.dart';
+import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/SignInScreen.dart';
@@ -16,18 +17,21 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
 
-  bool _initialized = false;
-  bool _needShowAuthFirst = true;
+  // Dependencies
   final _initAppService = InitAppService();
   final _currentUserService = CurrentUserService();
 
+  // Data
+  bool _initialized = false;
+  User _currentUser;
+
+  // Init
   void initializeApp() async {
     try {
       await _initAppService.initialize();
-      final hasCurrentUser = await _currentUserService.getHasCurrentUser();
+      _currentUser = await _currentUserService.getCachedCurrentUser();
       setState(() {
         _initialized = true;
-        _needShowAuthFirst = !hasCurrentUser;
       });
     } catch(error) {
       print('Init app error: $error');
@@ -57,10 +61,10 @@ class _AppState extends State<App> {
   Widget _buildStartScreen() {
     if (!_initialized) {
       return _buildLoadingScreen();
-    } else if (_needShowAuthFirst) {
-      return SignInScreen();
+    } else if (_currentUser != null) {
+      return ChatListScreen(user: _currentUser);
     } else {
-      return ChatListScreen();
+      return SignInScreen();
     }
   }
 

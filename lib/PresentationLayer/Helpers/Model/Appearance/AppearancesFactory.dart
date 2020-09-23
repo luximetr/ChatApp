@@ -17,6 +17,7 @@ class AppearancesFactory {
       background: BackgroundAppearance(
         primary: Color.fromRGBO(55, 65, 89, 1),
         secondary: Color.fromRGBO(41, 47, 67, 1),
+        tertiary: Color.fromRGBO(69, 83, 121, 1)
       ),
       text: TextAppearance(
         primary: Color.fromRGBO(176, 180, 191, 1),

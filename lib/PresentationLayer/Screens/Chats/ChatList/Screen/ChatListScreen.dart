@@ -93,7 +93,8 @@ class ChatListScreenState extends State<ChatListScreen> {
 
   void _navigateToChat(BuildContext context, Chat chat) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => ChatScreen(chat: chat))
+      MaterialPageRoute(builder: (context) =>
+          ChatScreen(chat: chat, currentUser: widget.user))
     );
   }
 

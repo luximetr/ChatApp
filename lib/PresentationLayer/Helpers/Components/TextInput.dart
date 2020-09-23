@@ -7,6 +7,7 @@ class TextInput extends StatelessWidget {
 
   final TextEditingController controller;
   final bool obscureText;
+  final bool autocorrect;
   final TextInputType keyboardType;
   final String placeholder;
   final Widget suffixIcon;
@@ -14,6 +15,7 @@ class TextInput extends StatelessWidget {
   TextInput({
     this.controller,
     this.obscureText = false,
+    this.autocorrect = false,
     this.keyboardType,
     this.placeholder,
     this.suffixIcon,
@@ -24,6 +26,7 @@ class TextInput extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: obscureText,
+      autocorrect: autocorrect,
       keyboardType: keyboardType,
       style: TextStyle(color: appearance.text.primary),
       decoration: InputDecoration(

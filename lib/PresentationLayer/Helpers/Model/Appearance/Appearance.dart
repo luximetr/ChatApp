@@ -13,10 +13,11 @@ class Appearance {
 class BackgroundAppearance {
   Color primary;
   Color secondary;
+  Color tertiary;
   Color primaryDivider;
   Color disruptiveDivider;
 
-  BackgroundAppearance({this.primary, this.secondary, this.primaryDivider, this.disruptiveDivider});
+  BackgroundAppearance({this.primary, this.secondary, this.tertiary, this.primaryDivider, this.disruptiveDivider});
 }
 
 class TextAppearance {

@@ -26,9 +26,13 @@ class ChatListItemViewState extends State<ChatListItemView> {
         child: Row(
             children: [
               AvatarView(title: 'NA', side: 50, backgroundColor: appearance.background.secondary),
-              Text(widget.name, style: TextStyle(fontSize: 16, color: appearance.text.primary)),
-              Spacer(),
-              Icon(Icons.keyboard_arrow_right, color: appearance.text.secondary, size: 26)
+              Expanded(
+                child: Text(widget.name, style: TextStyle(fontSize: 16, color: appearance.text.primary), overflow: TextOverflow.ellipsis),
+              ),
+              Container(
+                child: Icon(Icons.keyboard_arrow_right, color: appearance.text.secondary, size: 26),
+                margin: EdgeInsets.only(left: 10),
+              )
             ]),
       ),
     );

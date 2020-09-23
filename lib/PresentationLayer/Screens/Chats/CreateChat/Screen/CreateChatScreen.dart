@@ -1,4 +1,5 @@
 
+import 'package:chat_app/ApplicationLayer/Services/Chat/CreateChatService.dart';
 import 'package:chat_app/ApplicationLayer/Services/User/FindUserService.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/CreateChat/Screen/CreateChatScreenView.dart';
@@ -12,6 +13,7 @@ class CreateChatScreenState extends State<CreateChatScreen> {
 
   // Dependencies
   final _findUserService = FindUserService();
+  final _createChatService = CreateChatService();
 
   // Data
   User _foundUser;
@@ -49,7 +51,11 @@ class CreateChatScreenState extends State<CreateChatScreen> {
 
   // Start chat
   void _onTapFoundUser() {
-    print('Start chat with ${_foundUser.name}');
+    _startChat(_foundUser);
+  }
+
+  void _startChat(User targetUser) {
+    _createChatService.createChat(targetUser.id);
   }
 
   // Build
