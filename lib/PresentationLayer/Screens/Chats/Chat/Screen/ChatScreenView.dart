@@ -73,14 +73,14 @@ class ChatScreenViewState extends State<ChatScreenView> {
   Widget _buildSentMessageView(MessageViewModel message) {
     return  SentMessageView(
       text: message.text,
-      time: 'Time',
+      time: message.time,
     );
   }
 
   Widget _buildReceivedMessageView(MessageViewModel message) {
     return ReceivedMessageView(
       text: message.text,
-      time: 'Time',
+      time: message.time,
     );
   }
 

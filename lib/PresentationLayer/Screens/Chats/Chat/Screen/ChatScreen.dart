@@ -6,6 +6,7 @@ import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEvent.dart';
 import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEventType.dart';
 import 'package:chat_app/ModelLayer/Business/Message/Message.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageDateFormatter.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreenView.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +29,7 @@ class ChatScreenState extends State<ChatScreen> {
   final _chatEventsService = ChatEventsService();
 
   final _listController = ScrollController();
+  final _messageDateFormatter = MessageDateFormatter();
 
   // Data
   final List<MessageViewModel> _displayMessages = [];
@@ -47,6 +49,18 @@ class ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    // setState(() {
+    //   _displayMessages.addAll([
+    //     MessageViewModel(messageId: 'id', text: '.', time: '12:03 pm', isFromCurrentUser: true),
+    //     MessageViewModel(messageId: 'id', text: '.', time: '03:23 am', isFromCurrentUser: false),
+    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true),
+    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '03:23 am', isFromCurrentUser: false),
+    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd', time: '03:23 am', isFromCurrentUser: false),
+    //     MessageViewModel(messageId: 'id', text: 'Some text', time: '12:03 pm', isFromCurrentUser: true),
+    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true),
+    //   ]);
+    // });
+
     _startListenChatEvents();
   }
 
@@ -96,6 +110,7 @@ class ChatScreenState extends State<ChatScreen> {
           MessageViewModel(
               messageId: message.id,
               text: message.text,
+              time: _messageDateFormatter.format(message.createdAt),
               isFromCurrentUser: message.senderId == widget.currentUser.id
           )
       );

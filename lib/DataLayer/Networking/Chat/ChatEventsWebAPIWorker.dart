@@ -20,7 +20,10 @@ class ChatEventsWebAPIWorker extends FirestoreWebAPIWorker {
     final chatDocument = _chatsCollectionReference.doc(chatId);
     final messagesCollection = chatDocument.collection('messages');
 
-    _subscription = messagesCollection.snapshots().listen((querySnapshot) {
+    _subscription = messagesCollection
+        // .where('createdAt', isGreaterThan: DateTime.now())
+        .snapshots()
+        .listen((querySnapshot) {
       if (querySnapshot.metadata.isFromCache) { return; }
 
       final chatEvents = querySnapshot.docChanges.map((docChange) {
