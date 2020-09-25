@@ -18,7 +18,7 @@ class MessageJSONConverter {
       id: id,
       text: text,
       senderId: senderId,
-      createdAt: createdAt.toDate() ?? DateTime.now(),
+      createdAt: createdAt?.toDate() ?? DateTime.now(),
     );
   }
 }

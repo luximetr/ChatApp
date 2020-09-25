@@ -40,11 +40,13 @@ class ChatScreenViewState extends State<ChatScreenView> {
   Widget _buildBody() {
     return Container(
       color: appearance.background.primary,
-      child: Column(
-        children: [
-          _buildMessagesListView(),
-          _buildInputMessageView(),
-        ],
+      child: SafeArea(
+        child: Column(
+          children: [
+            _buildMessagesListView(),
+            _buildInputMessageView(),
+          ],
+        ),
       ),
     );
   }

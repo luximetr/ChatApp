@@ -20,28 +20,52 @@ class InputMessageViewState extends State<InputMessageView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Row(
-      children: [
-        _buildInputView(),
-        _buildSendButton()
-      ],
-    ));
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _buildInputView(),
+          _buildSendButton()
+        ],
+      ),
+    );
   }
 
   Widget _buildInputView() {
     return Expanded(
-      child: TextInput(
-        controller: _messageController,
+      child: Container(
+        margin: EdgeInsets.only(left: 12),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: TextField(
+            controller: _messageController,
+            autocorrect: false,
+            minLines: 1,
+            maxLines: 5,
+            style: TextStyle(color: appearance.text.primary, fontSize: 18),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: appearance.background.secondary,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+            ),
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildSendButton() {
     return Container(
-      child: FlatButton(
-          onPressed: _onSendMessageTap,
-          child: Icon(Icons.send, color: appearance.text.primary)
+      child: InkWell(
+        borderRadius: BorderRadius.circular(25),
+        onTap: _onSendMessageTap,
+        child: Icon(Icons.send, color: appearance.button.tertiary.title, size: 26)
       ),
+      margin: EdgeInsets.only(left: 10, right: 12),
       height: 50,
       width: 50,
     );

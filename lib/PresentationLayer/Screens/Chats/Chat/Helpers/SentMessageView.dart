@@ -40,7 +40,7 @@ class SentMessageViewState extends State<SentMessageView> {
       margin: EdgeInsets.only(right: 6, left: 10, bottom: 2),
       child: Text(
           widget.time,
-          style: TextStyle(fontSize: 15, color: appearance.text.secondary)
+          style: TextStyle(fontSize: 14, color: appearance.text.secondary)
       ),
     );
   }

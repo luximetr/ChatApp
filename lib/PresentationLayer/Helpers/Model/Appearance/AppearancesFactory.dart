@@ -27,6 +27,14 @@ class AppearancesFactory {
         primary: ButtonAppearance(
           background: Color.fromRGBO(44, 110, 237, 1),
           title: Color.fromRGBO(200, 208, 201, 1)
+        ),
+        secondary: ButtonAppearance(
+          background: Colors.transparent,
+          title: Color.fromRGBO(69, 83, 121, 1)
+        ),
+        tertiary: ButtonAppearance(
+          background: Colors.transparent,
+          title: Color.fromRGBO(200, 208, 201, 1),
         )
       ),
       navigation: NavigationAppearance(

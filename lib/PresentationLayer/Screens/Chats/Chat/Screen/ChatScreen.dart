@@ -72,6 +72,7 @@ class ChatScreenState extends State<ChatScreen> {
 
   // Send message
   void _onSendTap(String text) {
+    if (text.isEmpty) { return; }
     _sendMessageService
         .sendMessage(widget.chat.id, text)
         .catchError((error) => print(error));

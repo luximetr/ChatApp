@@ -36,7 +36,7 @@ class ReceivedMessageViewState extends State<ReceivedMessageView> {
   Widget _buildTimeView() {
     return Container(
       margin: EdgeInsets.only(left: 6, bottom: 2),
-      child: Text(widget.time, style: TextStyle(fontSize: 15, color: appearance.text.secondary)),
+      child: Text(widget.time, style: TextStyle(fontSize: 14, color: appearance.text.secondary)),
     );
   }
 

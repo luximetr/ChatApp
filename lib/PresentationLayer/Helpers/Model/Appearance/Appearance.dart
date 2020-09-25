@@ -45,7 +45,9 @@ class ButtonAppearance {
 
 class ButtonAppearanceType {
   ButtonAppearance primary;
+  ButtonAppearance secondary;
+  ButtonAppearance tertiary;
 
-  ButtonAppearanceType({this.primary});
+  ButtonAppearanceType({this.primary, this.secondary, this.tertiary});
 }
 
