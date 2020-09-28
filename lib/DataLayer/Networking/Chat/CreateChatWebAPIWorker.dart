@@ -1,6 +1,7 @@
 
 import 'package:chat_app/DataLayer/Networking/Base/FirestoreWebAPIWorker.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
+import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreateChatWebAPIWorker extends FirestoreWebAPIWorker {
@@ -11,23 +12,25 @@ class CreateChatWebAPIWorker extends FirestoreWebAPIWorker {
     _collectionReference = firestore.collection('chats');
   }
 
-  Future<Chat> createChat(String currentUserId, String targetUserId) async {
-    final members = [currentUserId, targetUserId];
+  Future<Chat> createChat(User currentUser, User targetUser) async {
+    final members = [currentUser.id, targetUser.id];
     members.sort((a, b) => a.compareTo(b));
     final id = members.join('_');
-    final name = 'chat_$id';
 
     final newDocument = _collectionReference.doc(id);
 
     await newDocument.set({
       'id': id,
-      'name': name,
       'members': members,
+      'names': {
+        currentUser.id: targetUser.name,
+        targetUser.id: currentUser.name
+      }
     });
 
     return Chat(
       id: id,
-      name: name
+      name: targetUser.name
     );
   }
 }

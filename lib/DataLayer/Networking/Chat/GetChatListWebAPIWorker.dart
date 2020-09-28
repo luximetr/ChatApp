@@ -20,7 +20,7 @@ class GetChatListWebAPIWorker extends FirestoreWebAPIWorker {
         .get()
         .then((snapshot) {
           return snapshot.docs.map((doc) {
-            return _chatJSONConverter.toChat(doc.data());
+            return _chatJSONConverter.toChat(doc.data(), userId);
           }).toList();
         });
   }

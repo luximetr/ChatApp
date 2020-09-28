@@ -51,13 +51,13 @@ class ChatScreenState extends State<ChatScreen> {
     super.initState();
     // setState(() {
     //   _displayMessages.addAll([
-    //     MessageViewModel(messageId: 'id', text: '.', time: '12:03 pm', isFromCurrentUser: true),
+    //     MessageViewModel(messageId: 'id', text: '.', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.sending),
     //     MessageViewModel(messageId: 'id', text: '.', time: '03:23 am', isFromCurrentUser: false),
-    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true),
+    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.sent),
     //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '03:23 am', isFromCurrentUser: false),
     //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd', time: '03:23 am', isFromCurrentUser: false),
-    //     MessageViewModel(messageId: 'id', text: 'Some text', time: '12:03 pm', isFromCurrentUser: true),
-    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true),
+    //     MessageViewModel(messageId: 'id', text: 'Some text', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.read),
+    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.failed),
     //   ]);
     // });
 

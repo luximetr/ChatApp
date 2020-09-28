@@ -21,7 +21,7 @@ class ChatEventsWebAPIWorker extends FirestoreWebAPIWorker {
     final messagesCollection = chatDocument.collection('messages');
 
     _subscription = messagesCollection
-        // .where('createdAt', isGreaterThan: DateTime.now())
+        .where('createdAt', isGreaterThan: DateTime.now())
         .snapshots()
         .listen((querySnapshot) {
       if (querySnapshot.metadata.isFromCache) { return; }
@@ -39,8 +39,8 @@ class ChatEventsWebAPIWorker extends FirestoreWebAPIWorker {
   }
 
   void stopListenEvents() {
-    _subscription.cancel();
-    _streamController.close();
+    _subscription?.cancel();
+    _streamController?.close();
   }
 
 }

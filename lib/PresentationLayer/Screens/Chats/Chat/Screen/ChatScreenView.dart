@@ -76,6 +76,7 @@ class ChatScreenViewState extends State<ChatScreenView> {
     return  SentMessageView(
       text: message.text,
       time: message.time,
+      status: message.status,
     );
   }
 

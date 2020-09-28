@@ -55,7 +55,7 @@ class CreateChatScreenState extends State<CreateChatScreen> {
   }
 
   void _startChat(User targetUser) {
-    _createChatService.createChat(targetUser.id);
+    _createChatService.createChat(targetUser);
   }
 
   // Build

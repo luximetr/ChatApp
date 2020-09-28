@@ -20,5 +20,6 @@ class MessageViewModel {
 enum MessageViewModelStatus {
   sending,
   sent,
+  read,
   failed,
 }

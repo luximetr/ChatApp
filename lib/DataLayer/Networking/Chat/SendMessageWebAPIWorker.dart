@@ -27,7 +27,8 @@ class SendMessageWebAPIWorker extends FirestoreWebAPIWorker {
     return Message(
       id: id,
       senderId: senderId,
-      text: text
+      text: text,
+      createdAt: DateTime.now()
     );
   }
 }
