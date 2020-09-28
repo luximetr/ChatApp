@@ -4,6 +4,7 @@ import 'package:chat_app/PresentationLayer/Helpers/Components/AppBarBuilder.dart
 import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/InputMessageView.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModelStatus.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/ReceivedMessageView.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/SentMessageView.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,12 +16,14 @@ class ChatScreenView extends StatefulWidget {
   final Function (String text) onSendTap;
   final List<MessageViewModel> displayMessages;
   final ScrollController listController;
+  final MessageViewModelStatus Function(MessageViewModel message) getMessageStatusCallback;
 
   ChatScreenView({
     @required this.chat,
     @required this.onSendTap,
     @required this.displayMessages,
-    @required this.listController
+    @required this.listController,
+    @required this.getMessageStatusCallback,
   });
 
   @override
@@ -73,10 +76,10 @@ class ChatScreenViewState extends State<ChatScreenView> {
   }
 
   Widget _buildSentMessageView(MessageViewModel message) {
-    return  SentMessageView(
+    return SentMessageView(
       text: message.text,
       time: message.time,
-      status: message.status,
+      status: widget.getMessageStatusCallback(message),
     );
   }
 

@@ -6,11 +6,11 @@ class ChatMessageEventsService {
   
   final _chatMessageEventsWebAPIWorker = ChatMessageEventsWebAPIWorker();
 
-  Stream<ChatEvent> startListenChatEvents(String chatId) {
+  Stream<ChatEvent> startListenChatMessageEvents(String chatId) {
     return _chatMessageEventsWebAPIWorker.listenEvents(chatId);
   }
 
-  void stopListenChatEvents() {
+  void stopListenChatMessageEvents() {
     _chatMessageEventsWebAPIWorker.stopListenEvents();
   }
 }

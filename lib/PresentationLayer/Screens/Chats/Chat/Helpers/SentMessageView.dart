@@ -1,8 +1,8 @@
 
 import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModelStatus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'MessageViewModel.dart';
 
 class SentMessageView extends StatefulWidget {
 
