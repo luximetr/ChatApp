@@ -1,5 +1,5 @@
 
-import 'package:chat_app/ApplicationLayer/Services/Chat/ChatEventsService.dart';
+import 'package:chat_app/ApplicationLayer/Services/Chat/ChatMessageEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/SendMessageService.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEvent.dart';
@@ -26,7 +26,7 @@ class ChatScreenState extends State<ChatScreen> {
 
   // Dependencies
   final _sendMessageService = SendMessageService();
-  final _chatEventsService = ChatEventsService();
+  final _chatMessageEventsService = ChatMessageEventsService();
 
   final _listController = ScrollController();
   final _messageDateFormatter = MessageDateFormatter();
@@ -80,14 +80,14 @@ class ChatScreenState extends State<ChatScreen> {
 
   // Chat events
   void _startListenChatEvents() {
-    _chatEventsService
+    _chatMessageEventsService
         .startListenChatEvents(widget.chat.id)
         .listen((event) => _handleChatEvent(event))
         .onError((error) => print('Error: $error'));
   }
 
   void _stopListenChatEvents() {
-    _chatEventsService.stopListenChatEvents();
+    _chatMessageEventsService.stopListenChatEvents();
   }
 
   void _handleChatEvent(ChatEvent event) {
@@ -109,10 +109,11 @@ class ChatScreenState extends State<ChatScreen> {
     setState(() {
       _displayMessages.add(
           MessageViewModel(
-              messageId: message.id,
-              text: message.text,
-              time: _messageDateFormatter.format(message.createdAt),
-              isFromCurrentUser: message.senderId == widget.currentUser.id
+            messageId: message.id,
+            text: message.text,
+            time: _messageDateFormatter.format(message.createdAt),
+            isFromCurrentUser: message.senderId == widget.currentUser.id,
+            status: MessageViewModelStatus.sent
           )
       );
     });

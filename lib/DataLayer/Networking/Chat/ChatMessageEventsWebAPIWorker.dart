@@ -5,14 +5,14 @@ import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEvent.dart';
 import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEventConverter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ChatEventsWebAPIWorker extends FirestoreWebAPIWorker {
+class ChatMessageEventsWebAPIWorker extends FirestoreWebAPIWorker {
 
   CollectionReference _chatsCollectionReference;
   final _eventsConverter = ChatEventConverter();
   final _streamController = StreamController<ChatEvent>();
   StreamSubscription<QuerySnapshot> _subscription;
 
-  ChatEventsWebAPIWorker() {
+  ChatMessageEventsWebAPIWorker() {
     _chatsCollectionReference = firestore.collection('chats');
   }
 

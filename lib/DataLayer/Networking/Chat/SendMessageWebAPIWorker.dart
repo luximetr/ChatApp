@@ -11,24 +11,19 @@ class SendMessageWebAPIWorker extends FirestoreWebAPIWorker {
     _chatsCollectionReference = firestore.collection('chats');
   }
 
-  Future<Message> sendMessage(String chatId, String senderId, String text) async {
+  Future<void> sendMessage(String chatId, String senderId, String text) async {
     final chatDocument = _chatsCollectionReference.doc(chatId);
     final messagesCollection = chatDocument.collection('messages');
     final newMessageDocument = messagesCollection.doc();
     final id = newMessageDocument.id;
 
-    await newMessageDocument.set({
+    final data = {
       'id': id,
       'senderId': senderId,
       'text': text,
       'createdAt': FieldValue.serverTimestamp()
-    });
+    };
 
-    return Message(
-      id: id,
-      senderId: senderId,
-      text: text,
-      createdAt: DateTime.now()
-    );
+    return await newMessageDocument.set(data);
   }
 }
