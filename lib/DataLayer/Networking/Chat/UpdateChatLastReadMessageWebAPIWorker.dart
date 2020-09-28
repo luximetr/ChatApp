@@ -13,7 +13,7 @@ class UpdateChatLastReadMessageWebAPIWorker extends FirestoreWebAPIWorker {
   Future<void> updateChatLastSentMessage(String chatId, String userId, DateTime messageCreatedAt) async {
     final chatDocument = _collectionReference.doc(chatId);
     final data = {
-      'lastReadMessage': {
+      'messageLastRead': {
         userId: messageCreatedAt
       }
     };

@@ -2,6 +2,7 @@
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatMessageEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/SendMessageService.dart';
+import 'package:chat_app/ApplicationLayer/Services/Chat/UpdateChatLastReadMessageService.dart';
 import 'package:chat_app/DataLayer/Calculation/DateCalculator.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEvent.dart';
@@ -31,6 +32,7 @@ class ChatScreenState extends State<ChatScreen> {
   final _sendMessageService = SendMessageService();
   final _chatMessageEventsService = ChatMessageEventsService();
   final _chatUpdatesService = ChatEventsService();
+  final _updateChatLastReadMessage = UpdateChatLastReadMessageService();
 
   final _listController = ScrollController();
   final _messageDateFormatter = MessageDateFormatter();
@@ -142,6 +144,7 @@ class ChatScreenState extends State<ChatScreen> {
       _displayMessages.add(viewModel);
     });
     _scrollToLastMessage();
+    _markMessageAsReadIfNeeded(message);
   }
 
   // Message modified
@@ -163,23 +166,37 @@ class ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  // Read message
+  void _markMessageAsReadIfNeeded(Message message) {
+    if (_getIsFromCurrentUser(message)) { return; }
+    _updateChatLastReadMessage.updateChatLastReadMessage(
+        _chat.id,
+        widget.currentUser.id,
+        message
+    );
+  }
+
   // MessageViewModel
   MessageViewModel _createMessageViewModel(Message message) {
     return MessageViewModel(
       message: message,
       text: message.text,
       time: _messageDateFormatter.format(message.createdAt),
-      isFromCurrentUser: message.senderId == widget.currentUser.id,
+      isFromCurrentUser: _getIsFromCurrentUser(message),
       status: _getMessageViewModelStatus(message),
     );
   }
 
+  bool _getIsFromCurrentUser(Message message) {
+    return message.senderId == widget.currentUser.id;
+  }
+
   MessageViewModelStatus _getMessageViewModelStatus(Message message) {
     if (_chat.lastReadMessageCreatedAt == null ||
-        _dateCalculator.isLessOrEqual(_chat.lastReadMessageCreatedAt, message.createdAt)) {
-      return MessageViewModelStatus.sent;
-    } else {
+        _dateCalculator.isLessOrEqual(message.createdAt, _chat.lastReadMessageCreatedAt)) {
       return MessageViewModelStatus.read;
+    } else {
+      return MessageViewModelStatus.sent;
     }
   }
 
