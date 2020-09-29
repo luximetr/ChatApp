@@ -1,6 +1,7 @@
 
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatMessageEventsService.dart';
+import 'package:chat_app/ApplicationLayer/Services/Chat/GetMessagesHistoryService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/SendMessageService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/UpdateChatLastReadMessageService.dart';
 import 'package:chat_app/DataLayer/Calculation/DateCalculator.dart';
@@ -32,15 +33,16 @@ class ChatScreenState extends State<ChatScreen> {
   final _sendMessageService = SendMessageService();
   final _chatMessageEventsService = ChatMessageEventsService();
   final _chatUpdatesService = ChatEventsService();
-  final _updateChatLastReadMessage = UpdateChatLastReadMessageService();
+  final _updateChatLastReadMessageService = UpdateChatLastReadMessageService();
+  final _getMessagesHistoryService = GetMessagesHistoryService();
 
-  final _listController = ScrollController();
   final _messageDateFormatter = MessageDateFormatter();
   final _dateCalculator = DateCalculator();
 
   // Data
   Chat _chat;
   final List<MessageViewModel> _displayMessages = [];
+  bool _isLoadingHistory = false;
 
   // View
   @override
@@ -49,8 +51,8 @@ class ChatScreenState extends State<ChatScreen> {
       chat: _chat,
       onSendTap: _onSendTap,
       displayMessages: _displayMessages,
-      listController: _listController,
       getMessageStatusCallback: (messageVM) => _getMessageViewModelStatus(messageVM.message),
+      onReachedScrollEnd: _onReachedScrollEnd,
     );
   }
 
@@ -62,18 +64,7 @@ class ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    // setState(() {
-    //   _displayMessages.addAll([
-    //     MessageViewModel(messageId: 'id', text: '.', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.sending),
-    //     MessageViewModel(messageId: 'id', text: '.', time: '03:23 am', isFromCurrentUser: false),
-    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.sent),
-    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '03:23 am', isFromCurrentUser: false),
-    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd', time: '03:23 am', isFromCurrentUser: false),
-    //     MessageViewModel(messageId: 'id', text: 'Some text', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.read),
-    //     MessageViewModel(messageId: 'id', text: 'Long text asd ahsdh askjda sjkhd kjashdjk ahksd ahskj ahsdj kashdjk ahsd', time: '12:03 pm', isFromCurrentUser: true, status: MessageViewModelStatus.failed),
-    //   ]);
-    // });
-
+    _loadMessagesHistoryNextPage();
     _startListenChatMessageEvents();
     _startListenChatUpdates();
   }
@@ -141,9 +132,8 @@ class ChatScreenState extends State<ChatScreen> {
   void _handleMessageCreated(Message message) {
     final viewModel = _createMessageViewModel(message);
     setState(() {
-      _displayMessages.add(viewModel);
+      _displayMessages.insert(0, viewModel);
     });
-    _scrollToLastMessage();
     _markMessageAsReadIfNeeded(message);
   }
 
@@ -169,7 +159,7 @@ class ChatScreenState extends State<ChatScreen> {
   // Read message
   void _markMessageAsReadIfNeeded(Message message) {
     if (_getIsFromCurrentUser(message)) { return; }
-    _updateChatLastReadMessage.updateChatLastReadMessage(
+    _updateChatLastReadMessageService.updateChatLastReadMessage(
         _chat.id,
         widget.currentUser.id,
         message
@@ -193,10 +183,10 @@ class ChatScreenState extends State<ChatScreen> {
 
   MessageViewModelStatus _getMessageViewModelStatus(Message message) {
     if (_chat.lastReadMessageCreatedAt == null ||
-        _dateCalculator.isLessOrEqual(message.createdAt, _chat.lastReadMessageCreatedAt)) {
-      return MessageViewModelStatus.read;
-    } else {
+        _dateCalculator.isGreaterThan(message.createdAt, _chat.lastReadMessageCreatedAt)) {
       return MessageViewModelStatus.sent;
+    } else {
+      return MessageViewModelStatus.read;
     }
   }
 
@@ -205,14 +195,36 @@ class ChatScreenState extends State<ChatScreen> {
     return _displayMessages.indexWhere((element) => element.message.id == messageId);
   }
 
-  // Scroll to message
-  void _scrollToLastMessage() {
-    Future.delayed(Duration(milliseconds: 100), () {
-      _listController.animateTo(
-          _listController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeOut
-      );
+  // History
+  void _loadMessagesHistoryNextPage() {
+    if (_isLoadingHistory == true) { return; }
+    final startAfterMessageId = _getLastHistoryMessageId();
+    _isLoadingHistory = true;
+    _getMessagesHistoryService
+        .getMessagesHistory(_chat.id, startAfterMessageId)
+        .then((messages) {
+          _isLoadingHistory = false;
+          _displayMessagesHistory(messages);
+        })
+        .catchError((error) {
+          _isLoadingHistory = false;
+          print('Error $error');
+        });
+  }
+
+  String _getLastHistoryMessageId() {
+    if (_displayMessages.isEmpty) { return null; }
+    return _displayMessages.last.message.id;
+  }
+
+  void _onReachedScrollEnd() {
+    _loadMessagesHistoryNextPage();
+  }
+
+  void _displayMessagesHistory(List<Message> messages) {
+    final viewModels = messages.map((message) => _createMessageViewModel(message));
+    setState(() {
+      _displayMessages.addAll(viewModels);
     });
   }
 }

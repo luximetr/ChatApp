@@ -15,15 +15,15 @@ class ChatScreenView extends StatefulWidget {
   final Chat chat;
   final Function (String text) onSendTap;
   final List<MessageViewModel> displayMessages;
-  final ScrollController listController;
   final MessageViewModelStatus Function(MessageViewModel message) getMessageStatusCallback;
+  final VoidCallback onReachedScrollEnd;
 
   ChatScreenView({
     @required this.chat,
     @required this.onSendTap,
     @required this.displayMessages,
-    @required this.listController,
     @required this.getMessageStatusCallback,
+    @required this.onReachedScrollEnd,
   });
 
   @override
@@ -56,12 +56,23 @@ class ChatScreenViewState extends State<ChatScreenView> {
 
   Widget _buildMessagesListView() {
     return Expanded(
-      child: ListView.builder(
-        controller: widget.listController,
-        itemCount: widget.displayMessages.length,
-        itemBuilder: (context, index) {
-          return _buildMessageListItem(index);
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (scrollInfo) {
+          if (scrollInfo.metrics.pixels > scrollInfo.metrics.maxScrollExtent - 100) {
+            widget.onReachedScrollEnd();
+          }
+          return;
         },
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: ListView.builder(
+            reverse: true,
+            itemCount: widget.displayMessages.length,
+            itemBuilder: (context, index) {
+              return _buildMessageListItem(index);
+            },
+          ),
+        ),
       ),
     );
   }

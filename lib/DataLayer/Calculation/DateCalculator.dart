@@ -8,7 +8,11 @@ class DateCalculator {
     return dateWithoutTime == today;
   }
 
+  bool isGreaterThan(DateTime date1, DateTime date2) {
+    return date1.compareTo(date2) >= 1;
+  }
+
   bool isLessOrEqual(DateTime date1, DateTime date2) {
-    return !(date1.compareTo(date2) >= 1);
+    return !isGreaterThan(date1, date2);
   }
 }
