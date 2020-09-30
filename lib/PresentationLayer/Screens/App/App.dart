@@ -4,6 +4,7 @@ import 'package:chat_app/ApplicationLayer/Services/User/CurrentUserService.dart'
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
+import 'package:chat_app/PresentationLayer/Screens/App/LoadingScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/SignInScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:flutter/material.dart';
@@ -54,25 +55,18 @@ class _AppState extends State<App> {
       theme: ThemeData(
           backgroundColor: appearance.background.primary
       ),
+      initialRoute: '/',
       home: _buildStartScreen(),
     );
   }
 
   Widget _buildStartScreen() {
     if (!_initialized) {
-      return _buildLoadingScreen();
+      return LoadingScreen();
     } else if (_currentUser != null) {
       return ChatListScreen(user: _currentUser);
     } else {
       return SignInScreen();
     }
-  }
-
-  Widget _buildLoadingScreen() {
-    return Scaffold(
-        body: Center(
-          child: Text('Loading'),
-        )
-    );
   }
 }

@@ -8,17 +8,18 @@ import 'package:chat_app/ApplicationLayer/Services/Chat/UpdateChatLastReadMessag
 import 'package:chat_app/DataLayer/Calculation/DateCalculator.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEvent.dart';
-import 'package:chat_app/ModelLayer/Business/ChatListEvent/ChatListEvent.dart';
 import 'package:chat_app/ModelLayer/Business/Message/Message.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/ModelLayer/Common/RemoteDBEvent/RemoteDBEventType.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageDateFormatter.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModelStatus.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreenView.dart';
 import 'package:flutter/cupertino.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends StatefulWidget with NamedRoute {
+  @override final String routeName = '/chat';
 
   final Chat chat;
   final User currentUser;

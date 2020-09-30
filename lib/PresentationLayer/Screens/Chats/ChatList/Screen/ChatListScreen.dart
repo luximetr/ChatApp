@@ -6,6 +6,7 @@ import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/ChatListEvent/ChatListEvent.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/ModelLayer/Common/RemoteDBEvent/RemoteDBEventType.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreenView.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/CreateChat/Screen/CreateChatScreen.dart';
@@ -13,7 +14,9 @@ import 'package:chat_app/PresentationLayer/Screens/Profile/Screen/ProfileScreen.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ChatListScreen extends StatefulWidget {
+class ChatListScreen extends StatefulWidget with NamedRoute {
+  static String routeNameStatic = '/chat_list';
+  @override final String routeName = routeNameStatic;
 
   final User user;
 
@@ -87,9 +90,11 @@ class ChatListScreenState extends State<ChatListScreen> {
   }
 
   void _navigateToCreateChat(BuildContext context) {
+    final targetScreen = CreateChatScreen(currentUser: widget.user);
     Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => CreateChatScreen()
+          builder: (context) => targetScreen,
+          settings: RouteSettings(name: CreateChatScreen.routeName)
       )
     );
   }

@@ -12,13 +12,15 @@ class CreateChatScreenView extends StatefulWidget {
   final Function(String name) onTapSearch;
   final User foundUser;
   final bool isSearchingUser;
+  final bool isNothingFound;
   final VoidCallback onTapFoundUser;
 
   CreateChatScreenView({
     @required this.onTapSearch,
     this.foundUser,
     this.isSearchingUser,
-    this.onTapFoundUser
+    this.isNothingFound,
+    this.onTapFoundUser,
   });
 
   @override
@@ -78,6 +80,7 @@ class CreateChatScreenViewState extends State<CreateChatScreenView> {
         onFoundUserTap: widget.onTapFoundUser,
         user: widget.foundUser,
         isLoading: widget.isSearchingUser,
+        isNothingFound: widget.isNothingFound,
       ),
     );
   }

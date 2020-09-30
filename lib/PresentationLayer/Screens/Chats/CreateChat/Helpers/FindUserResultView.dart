@@ -10,8 +10,14 @@ class FindUserResultView extends StatefulWidget {
   final VoidCallback onFoundUserTap;
   final User user;
   final bool isLoading;
+  final bool isNothingFound;
 
-  FindUserResultView({@required this.onFoundUserTap, this.user, this.isLoading});
+  FindUserResultView({
+    @required this.onFoundUserTap,
+    @required this.user,
+    @required this.isLoading,
+    @required this.isNothingFound,
+  });
 
   @override
   State<StatefulWidget> createState() => FindUserResultViewState();
@@ -33,8 +39,10 @@ class FindUserResultViewState extends State<FindUserResultView> {
       return _buildUserFoundState();
     } else if (widget.isLoading) {
       return _buildInProgressState();
-    } else {
+    } else if (widget.isNothingFound) {
       return _buildNothingFoundState();
+    } else {
+      return _buildPlaceholderState();
     }
   }
 
@@ -70,19 +78,29 @@ class FindUserResultViewState extends State<FindUserResultView> {
     );
   }
 
-  // Nothing found state
-  Widget _buildNothingFoundState() {
+  // Just text state
+  Widget _buildJustText(String text) {
     return Row(
       children: [
         Container(
           margin: EdgeInsets.only(left: 12),
           child: Text(
-            'Nothing found',
+            text,
             style: TextStyle(fontSize: 16, color: appearance.text.primary),
           ),
         )
       ],
     );
+  }
+
+  // Placeholder state
+  Widget _buildPlaceholderState() {
+    return _buildJustText('Here will be a result');
+  }
+
+  // Nothing found state
+  Widget _buildNothingFoundState() {
+    return _buildJustText('Nothing found');
   }
 
   // Success result state
