@@ -1,5 +1,6 @@
 
-import 'package:chat_app/ApplicationLayer/Services/Chat/ChatEventsService.dart';
+import 'dart:async';
+import 'package:chat_app/ApplicationLayer/Services/Chat/ChatListService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatMessageEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/GetMessagesHistoryService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/SendMessageService.dart';
@@ -7,9 +8,10 @@ import 'package:chat_app/ApplicationLayer/Services/Chat/UpdateChatLastReadMessag
 import 'package:chat_app/DataLayer/Calculation/DateCalculator.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEvent.dart';
-import 'package:chat_app/ModelLayer/Business/ChatEvent/ChatEventType.dart';
+import 'package:chat_app/ModelLayer/Business/ChatListEvent/ChatListEvent.dart';
 import 'package:chat_app/ModelLayer/Business/Message/Message.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
+import 'package:chat_app/ModelLayer/Common/RemoteDBEvent/RemoteDBEventType.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageDateFormatter.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModelStatus.dart';
@@ -32,7 +34,8 @@ class ChatScreenState extends State<ChatScreen> {
   // Dependencies
   final _sendMessageService = SendMessageService();
   final _chatMessageEventsService = ChatMessageEventsService();
-  final _chatUpdatesService = ChatEventsService();
+  final _chatUpdatesService = ChatListService();
+  StreamSubscription<Chat> _chatUpdatesSubscription;
   final _updateChatLastReadMessageService = UpdateChatLastReadMessageService();
   final _getMessagesHistoryService = GetMessagesHistoryService();
 
@@ -86,17 +89,16 @@ class ChatScreenState extends State<ChatScreen> {
   
   // Chat events
   void _startListenChatUpdates() {
-    _chatUpdatesService
-        .startListenChatUpdates(widget.chat.id, widget.currentUser.id)
-        .listen((update) => _handleChatUpdates(update))
-        .onError((error) => print('Error $error'));
+    _chatUpdatesSubscription = _chatUpdatesService.startListenChatUpdates(widget.currentUser.id, widget.chat.id);
+    _chatUpdatesSubscription.onData((update) => _handleChatUpdate(update));
+    _chatUpdatesSubscription.onError((error) => print('Error $error'));
   }
   
   void _stopListenChatUpdates() {
-    _chatUpdatesService.stopListenChatUpdates();
+    _chatUpdatesSubscription?.cancel();
   }
   
-  void _handleChatUpdates(Chat updatedChat) {
+  void _handleChatUpdate(Chat updatedChat) {
     setState(() {
       _chat = updatedChat;
     });
@@ -116,14 +118,14 @@ class ChatScreenState extends State<ChatScreen> {
 
   void _handleChatMessageEvent(ChatEvent event) {
     switch (event.type) {
-      case ChatEventType.created:
-        _handleMessageCreated(event.message);
+      case RemoteDBEventType.created:
+        _handleMessageCreated(event.data);
         break;
-      case ChatEventType.modified:
-        _handleMessageModified(event.message);
+      case RemoteDBEventType.updated:
+        _handleMessageModified(event.data);
         break;
-      case ChatEventType.removed:
-        _handleMessageRemoved(event.message);
+      case RemoteDBEventType.deleted:
+        _handleMessageRemoved(event.data);
         break;
     }
   }
@@ -226,5 +228,8 @@ class ChatScreenState extends State<ChatScreen> {
     setState(() {
       _displayMessages.addAll(viewModels);
     });
+    if (messages.isNotEmpty) {
+      _markMessageAsReadIfNeeded(messages.first);
+    }
   }
 }
