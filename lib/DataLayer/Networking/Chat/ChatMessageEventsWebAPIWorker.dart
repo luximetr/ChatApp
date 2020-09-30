@@ -24,16 +24,14 @@ class ChatMessageEventsWebAPIWorker extends FirestoreWebAPIWorker {
         .where('createdAt', isGreaterThan: DateTime.now())
         .snapshots()
         .listen((querySnapshot) {
-      if (querySnapshot.metadata.isFromCache) { return; }
+          final chatEvents = querySnapshot.docChanges.map((docChange) {
+            return _eventsConverter.toChatEvent(docChange);
+          }).toList();
 
-      final chatEvents = querySnapshot.docChanges.map((docChange) {
-        return _eventsConverter.toChatEvent(docChange);
-      });
-
-      chatEvents.forEach((chatEvent) {
-        _streamController.sink.add(chatEvent);
-      });
-    });
+          chatEvents.forEach((chatEvent) {
+            _streamController.sink.add(chatEvent);
+          });
+        });
 
     return _streamController.stream;
   }

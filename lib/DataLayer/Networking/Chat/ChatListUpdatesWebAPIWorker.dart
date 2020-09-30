@@ -21,8 +21,6 @@ class ChatListUpdatesWebAPIWorker extends FirestoreWebAPIWorker {
       .where('members', arrayContains: userId)
       .snapshots()
       .listen((querySnapshot) {
-        if (querySnapshot.metadata.isFromCache) { return; }
-
         final updates = querySnapshot.docChanges.map((docChange) {
           return _eventConverter.toEvent(docChange, userId);
         }).toList();

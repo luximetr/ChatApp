@@ -99,6 +99,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
   
   void _handleChatUpdate(Chat updatedChat) {
+    print('Chat screen chat will update ${updatedChat.lastReadMessageCreatedAt}');
     setState(() {
       _chat = updatedChat;
     });
@@ -184,6 +185,11 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   MessageViewModelStatus _getMessageViewModelStatus(Message message) {
+    if (message.text == 'e') {
+      print(_dateCalculator.isGreaterThan(message.createdAt, _chat.lastReadMessageCreatedAt));
+      print(message.createdAt);
+      print(_chat.lastReadMessageCreatedAt);
+    }
     if (_chat.lastReadMessageCreatedAt == null ||
         _dateCalculator.isGreaterThan(message.createdAt, _chat.lastReadMessageCreatedAt)) {
       return MessageViewModelStatus.sent;

@@ -9,10 +9,17 @@ class DateCalculator {
   }
 
   bool isGreaterThan(DateTime date1, DateTime date2) {
-    return date1.compareTo(date2) >= 1;
+    final normalisedDate1 = _roundToMilliseconds(date1);
+    final normalizedDate2 = _roundToMilliseconds(date2);
+    return normalisedDate1.compareTo(normalizedDate2) >= 1;
   }
 
   bool isLessOrEqual(DateTime date1, DateTime date2) {
     return !isGreaterThan(date1, date2);
+  }
+
+  DateTime _roundToMilliseconds(DateTime date) {
+    final milliseconds = date.microsecond > 500 ? date.millisecond + 1: date.millisecond;
+    return DateTime(date.year, date.month, date.day, date.hour, date.minute, date.second, milliseconds);
   }
 }
