@@ -40,6 +40,7 @@ class ChatListScreenState extends State<ChatListScreen> {
   Widget build(BuildContext context) {
     return ChatListScreenView(
       chats: _chats,
+      userName: widget.user.name,
       onAvatarTap: () { _onAvatarTap(context); },
       onCreateChat: () { _onCreateChat(context); },
       onChatTap: (chat) { _onChatTap(context, chat); },

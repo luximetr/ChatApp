@@ -1,4 +1,5 @@
 
+import 'package:chat_app/DataLayer/Calculation/ShortNameGenerator.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/AppBarBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:chat_app/PresentationLayer/Screens/Profile/Helpers/ProfileMainInfoView.dart';
@@ -9,6 +10,8 @@ class ProfileScreenView extends StatelessWidget {
 
   final VoidCallback onLogout;
   final String userName;
+  
+  final _shortNameGenerator = ShortNameGenerator();
 
   ProfileScreenView({@required this.onLogout, @required this.userName});
 
@@ -19,7 +22,7 @@ class ProfileScreenView extends StatelessWidget {
       body: Container(
         child: ListView(
           children: [
-            ProfileMainInfoView(initials: 'NA', name: this.userName)
+            ProfileMainInfoView(initials: _shortNameGenerator.createShortName(this.userName), name: this.userName)
           ],
         ),
         color: appearance.background.secondary,

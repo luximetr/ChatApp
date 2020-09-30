@@ -13,6 +13,7 @@ class CreateChatScreenView extends StatefulWidget {
   final User foundUser;
   final bool isSearchingUser;
   final bool isNothingFound;
+  final bool isChatCreatingLoading;
   final VoidCallback onTapFoundUser;
 
   CreateChatScreenView({
@@ -20,6 +21,7 @@ class CreateChatScreenView extends StatefulWidget {
     this.foundUser,
     this.isSearchingUser,
     this.isNothingFound,
+    this.isChatCreatingLoading,
     this.onTapFoundUser,
   });
 
@@ -81,6 +83,7 @@ class CreateChatScreenViewState extends State<CreateChatScreenView> {
         user: widget.foundUser,
         isLoading: widget.isSearchingUser,
         isNothingFound: widget.isNothingFound,
+        isChatCreatingLoading: widget.isChatCreatingLoading,
       ),
     );
   }

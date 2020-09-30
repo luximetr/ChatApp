@@ -5,7 +5,6 @@ import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/Routing.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreen.dart';
-import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/CreateChat/Screen/CreateChatScreenView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ class CreateChatScreenState extends State<CreateChatScreen> {
   User _foundUser;
   bool _isSearchingUser = false;
   bool _isNothingFound = false;
+  bool _isChatCreatingLoading = false;
 
   // Search user
   void _onTapSearch(String login) {
@@ -70,10 +70,29 @@ class CreateChatScreenState extends State<CreateChatScreen> {
   }
 
   void _startChat(BuildContext context, User targetUser) {
+    _willStartChat();
     _createChatService
         .createChat(targetUser)
-        .then((createdChat) => _navigateToChat(context, createdChat))
-        .catchError((error) => print('Start chat error $error'));
+        .then((createdChat) {
+          _willFinishStartChat();
+          _navigateToChat(context, createdChat);
+        })
+        .catchError((error) {
+          print('Start chat error $error');
+          _willFinishStartChat();
+        });
+  }
+
+  void _willStartChat() {
+    setState(() {
+      _isChatCreatingLoading = true;
+    });
+  }
+
+  void _willFinishStartChat() {
+    setState(() {
+      _isChatCreatingLoading = false;
+    });
   }
 
   // Build
@@ -84,6 +103,7 @@ class CreateChatScreenState extends State<CreateChatScreen> {
       onTapFoundUser: () { _onTapFoundUser(context); },
       foundUser: _foundUser,
       isSearchingUser: _isSearchingUser,
+      isChatCreatingLoading: _isChatCreatingLoading,
       isNothingFound: _isNothingFound,
     );
   }

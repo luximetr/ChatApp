@@ -1,4 +1,5 @@
 
+import 'package:chat_app/DataLayer/Calculation/ShortNameGenerator.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/AvatarView.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,8 @@ class ChatListItemView extends StatefulWidget {
 }
 
 class ChatListItemViewState extends State<ChatListItemView> {
+  
+  final _shortNameGenerator = ShortNameGenerator();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class ChatListItemViewState extends State<ChatListItemView> {
         margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: Row(
             children: [
-              AvatarView(title: 'NA', side: 50, backgroundColor: appearance.background.secondary),
+              AvatarView(title: _shortNameGenerator.createShortName(widget.name), side: 50, backgroundColor: appearance.background.secondary),
               Expanded(
                 child: Text(widget.name, style: TextStyle(fontSize: 16, color: appearance.text.primary), overflow: TextOverflow.ellipsis),
               ),

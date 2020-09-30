@@ -1,4 +1,5 @@
 
+import 'package:chat_app/DataLayer/Calculation/ShortNameGenerator.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/AppBarBuilder.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/AvatarView.dart';
@@ -22,13 +23,15 @@ class ChatListScreenView extends StatefulWidget {
 }
 
 class ChatListScreenViewState extends State<ChatListScreenView> {
+  
+  final _shortNameGenerator = ShortNameGenerator();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarBuilder.build(
         title: 'Chats',
-        trailing: AvatarView(title: "NA", side: 44, onTap: widget.onAvatarTap),
+        trailing: AvatarView(title: _shortNameGenerator.createShortName(widget.userName), side: 44, onTap: widget.onAvatarTap),
       ),
       body: _buildBody(),
       floatingActionButton: _buildCreateChatButton(),

@@ -1,4 +1,5 @@
 
+import 'package:chat_app/DataLayer/Calculation/ShortNameGenerator.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/AvatarView.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
@@ -11,12 +12,14 @@ class FindUserResultView extends StatefulWidget {
   final User user;
   final bool isLoading;
   final bool isNothingFound;
+  final bool isChatCreatingLoading;
 
   FindUserResultView({
     @required this.onFoundUserTap,
     @required this.user,
     @required this.isLoading,
     @required this.isNothingFound,
+    @required this.isChatCreatingLoading,
   });
 
   @override
@@ -25,6 +28,8 @@ class FindUserResultView extends StatefulWidget {
 }
 
 class FindUserResultViewState extends State<FindUserResultView> {
+
+  final _shortNameGenerator = ShortNameGenerator();
 
   @override
   Widget build(BuildContext context) {
@@ -106,17 +111,22 @@ class FindUserResultViewState extends State<FindUserResultView> {
   // Success result state
   Widget _buildUserFoundState() {
     return InkWell(
-      onTap: () { this.widget.onFoundUserTap(); },
+      onTap: () {
+        if (!widget.isChatCreatingLoading) {
+          this.widget.onFoundUserTap();
+        }
+      },
       child: Row(
         children: [
-          AvatarView(title: 'NA', side: 44, backgroundColor: appearance.background.secondary),
+          AvatarView(title: _shortNameGenerator.createShortName(widget.user.name), side: 44, backgroundColor: appearance.background.secondary),
           Container(
             child: Text(widget.user.name, style: TextStyle(color: appearance.text.primary, fontSize: 16)),
             margin: EdgeInsets.only(left: 4),
           ),
+          if (widget.isChatCreatingLoading) _buildLoader(),
           Spacer(),
           Icon(Icons.keyboard_arrow_right, color: appearance.text.secondary, size: 26)
-        ],
+        ].where((object) => object != null).toList()
       ),
     );
   }
