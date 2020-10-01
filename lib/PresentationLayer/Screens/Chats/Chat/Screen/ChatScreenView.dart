@@ -37,12 +37,12 @@ class ChatScreenViewState extends State<ChatScreenView> {
     return Scaffold(
       appBar: AppBarBuilder.build(title: widget.chat.name),
       body: _buildBody(),
+      backgroundColor: appearance.background.primary,
     );
   }
 
   Widget _buildBody() {
     return Container(
-      color: appearance.background.primary,
       child: SafeArea(
         child: Column(
           children: [

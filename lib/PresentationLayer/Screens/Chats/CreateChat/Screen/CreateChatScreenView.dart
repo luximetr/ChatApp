@@ -38,13 +38,13 @@ class CreateChatScreenViewState extends State<CreateChatScreenView> {
     return Scaffold(
       appBar: AppBarBuilder.build(title: 'Create chat'),
       body: _buildBody(),
+      backgroundColor: appearance.background.primary,
     );
   }
 
   Widget _buildBody() {
     return Container(
-      color: appearance.background.primary,
-        padding: EdgeInsets.symmetric(horizontal: 18),
+      padding: EdgeInsets.symmetric(horizontal: 18),
       child: Column(
         children: [
           _buildLoginInput(),
@@ -54,6 +54,7 @@ class CreateChatScreenViewState extends State<CreateChatScreenView> {
     );
   }
 
+  // Login
   Widget _buildLoginInput() {
     return Container(
       margin: EdgeInsets.only(top: 20),
@@ -61,6 +62,8 @@ class CreateChatScreenViewState extends State<CreateChatScreenView> {
         controller: _loginController,
         placeholder: 'Search login',
         suffixIcon: _buildSearchButton(),
+        textInputAction: TextInputAction.search,
+        onSubmitted: (text) { _onSearchButtonTap(); },
       ),
     );
   }
@@ -71,10 +74,15 @@ class CreateChatScreenViewState extends State<CreateChatScreenView> {
         Icons.search,
         color: appearance.text.secondary,
       ),
-      onTap: () { widget.onTapSearch(_loginController.text); },
+      onTap: _onSearchButtonTap,
     );
   }
 
+  void _onSearchButtonTap() {
+    widget.onTapSearch(_loginController.text);
+  }
+
+  // Search result
   Widget _buildSearchResult() {
     return Container(
       margin: EdgeInsets.only(top: 22),
