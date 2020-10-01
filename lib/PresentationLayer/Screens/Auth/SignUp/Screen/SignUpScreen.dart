@@ -1,6 +1,8 @@
 
 import 'package:chat_app/ApplicationLayer/Services/Auth/SignUpService.dart';
+import 'package:chat_app/ModelLayer/Business/Exceptions/AlreadyExistException.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/LoaderBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Helpers/SignUpScreenForm.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Helpers/SignUpScreenFormErrors.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Helpers/SignUpScreenFormValidator.dart';
@@ -25,12 +27,6 @@ class SignUpScreenState extends State<SignUpScreen> {
   var _errors = SignUpScreenFormErrors();
 
   // Sign up
-  void _signUp(BuildContext context, String name, String login, String password) {
-    _signUpService.signUp(name: name, login: login, password: password)
-        .then((user) => navigateToChatList(context, user))
-        .catchError((error) { print('SignUp error: $error'); });
-  }
-
   void _onSignUp(BuildContext context, SignUpScreenForm form) {
     if (!_validateForm(form)) { return; }
     _signUp(context, form.name, form.login, form.password);
@@ -38,11 +34,27 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   bool _validateForm(SignUpScreenForm form) {
     return _formValidator.validate(
-      form,
-      onErrors: (errors) {
-        setState(() { _errors = errors; });
-      }
+        form,
+        onErrors: (errors) {
+          setState(() { _errors = errors; });
+        }
     );
+  }
+
+  void _signUp(BuildContext context, String name, String login, String password) {
+    LoaderBuilder.show(context);
+    _signUpService.signUp(name: name, login: login, password: password)
+      .then((user) => navigateToChatList(context, user))
+      .catchError(_handleSignUpError)
+      .whenComplete(() => LoaderBuilder.hide());
+  }
+
+  void _handleSignUpError(error) {
+    if (error is AlreadyExistException) {
+      setState(() { _errors.loginError = error.message; });
+    } else {
+      print(error);
+    }
   }
 
   // Sign in

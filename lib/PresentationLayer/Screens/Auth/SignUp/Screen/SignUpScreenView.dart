@@ -20,43 +20,59 @@ class SignUpScreenView extends StatefulWidget {
 
 class SignUpScreenViewState extends State<SignUpScreenView> {
 
+  // Dependencies
   final _nameController = TextEditingController();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
 
+  // Focuses
+  final _loginFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _repeatPasswordFocus = FocusNode();
+
+  // Data
+  bool _passwordSecure = true;
+  bool _repeatPasswordSecure = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBody(),
-      resizeToAvoidBottomInset: false,
+      body: _buildBody(context),
+      backgroundColor: appearance.background.primary,
     );
   }
 
   // Body
-  Widget _buildBody() {
-    return Container(
-      child: Column(children: [
-        _buildNameTextInput(),
-        _buildLoginTextInput(),
-        _buildPasswordTextInput(),
-        _buildRepeatPasswordTextInput(),
-        _buildSignInButton(),
-        _buildSignUpButton(context),
-      ]),
-      padding: EdgeInsets.symmetric(horizontal: 18),
-      color: appearance.background.primary,
+  Widget _buildBody(BuildContext context) {
+    return GestureDetector(
+      onTap: () { FocusScope.of(context).unfocus(); },
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(children: [
+            _buildNameTextInput(context),
+            _buildLoginTextInput(context),
+            _buildPasswordTextInput(context),
+            _buildRepeatPasswordTextInput(),
+            _buildSignInButton(),
+            _buildSignUpButton(context),
+          ]),
+          padding: EdgeInsets.symmetric(horizontal: 18),
+        ),
+      ),
     );
   }
 
   // Name
-  Widget _buildNameTextInput() {
+  Widget _buildNameTextInput(BuildContext context) {
     return Container(
       child: TextInput(
         controller: _nameController,
         placeholder: 'Name',
         errorText: widget.errors.nameError,
+        textInputAction: TextInputAction.next,
         onChanged: (text) { _hideNameError(); },
+        onSubmitted: (text) { _makeLoginInFocus(context); },
       ),
       margin: EdgeInsets.only(top: 120),
     );
@@ -67,13 +83,16 @@ class SignUpScreenViewState extends State<SignUpScreenView> {
   }
 
   // Login
-  Widget _buildLoginTextInput() {
+  Widget _buildLoginTextInput(BuildContext context) {
     return Container(
       child: TextInput(
         controller: _loginController,
         placeholder: 'Login',
         errorText: widget.errors.loginError,
+        focusNode: _loginFocus,
+        textInputAction: TextInputAction.next,
         onChanged: (text) { _hideLoginError(); },
+        onSubmitted: (text) { _makePasswordInFocus(context); },
       ),
       margin: EdgeInsets.only(top: 6),
     );
@@ -83,22 +102,48 @@ class SignUpScreenViewState extends State<SignUpScreenView> {
     setState(() { widget.errors.loginError = null; });
   }
 
+  void _makeLoginInFocus(BuildContext context) {
+    FocusScope.of(context).requestFocus(_loginFocus);
+  }
+
   // Password
-  Widget _buildPasswordTextInput() {
+  Widget _buildPasswordTextInput(BuildContext context) {
     return Container(
       child: TextInput(
         controller: _passwordController,
         placeholder: 'Password',
-        obscureText: true,
+        obscureText: _passwordSecure,
         errorText: widget.errors.passwordError,
+        focusNode: _passwordFocus,
+        textInputAction: TextInputAction.next,
+        suffixIcon: _buildPasswordVisibilityButton(),
         onChanged: (text) { _hidePasswordError(); },
+        onSubmitted: (text) { _makeRepeatPasswordInFocus(context); },
       ),
       margin: EdgeInsets.only(top: 6),
     );
   }
 
+  Widget _buildPasswordVisibilityButton() {
+    return GestureDetector(
+      child: Icon(
+        _passwordSecure ? Icons.visibility : Icons.visibility_off,
+        color: appearance.text.secondary,
+      ),
+      onTap: _handleTapOnPasswordVisibilityButton,
+    );
+  }
+
+  void _handleTapOnPasswordVisibilityButton() {
+    setState(() { _passwordSecure = !_passwordSecure; });
+  }
+
   void _hidePasswordError() {
     setState(() { widget.errors.passwordError = null; });
+  }
+
+  void _makePasswordInFocus(BuildContext context) {
+    FocusScope.of(context).requestFocus(_passwordFocus);
   }
 
   // Repeat password
@@ -107,16 +152,37 @@ class SignUpScreenViewState extends State<SignUpScreenView> {
       child: TextInput(
         controller: _repeatPasswordController,
         placeholder: 'Repeat Password',
-        obscureText: true,
+        obscureText: _repeatPasswordSecure,
         errorText: widget.errors.repeatPasswordError,
+        focusNode: _repeatPasswordFocus,
+        suffixIcon: _buildRepeatPasswordVisibilityButton(),
         onChanged: (text) { _hideRepeatPasswordError(); },
+        onSubmitted: (text) { _onSignUpPressed(); },
       ),
       margin: EdgeInsets.only(top: 6),
     );
   }
 
+  Widget _buildRepeatPasswordVisibilityButton() {
+    return GestureDetector(
+      child: Icon(
+        _repeatPasswordSecure ? Icons.visibility : Icons.visibility_off,
+        color: appearance.text.secondary,
+      ),
+      onTap: _handleTapOnRepeatPasswordVisibilityButton,
+    );
+  }
+
+  void _handleTapOnRepeatPasswordVisibilityButton() {
+    setState(() { _repeatPasswordSecure = !_repeatPasswordSecure; });
+  }
+
   void _hideRepeatPasswordError() {
     setState(() { widget.errors.repeatPasswordError = null; });
+  }
+
+  void _makeRepeatPasswordInFocus(BuildContext context) {
+    FocusScope.of(context).requestFocus(_repeatPasswordFocus);
   }
 
   // Sign in

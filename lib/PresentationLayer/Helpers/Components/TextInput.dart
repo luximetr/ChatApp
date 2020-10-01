@@ -8,7 +8,10 @@ class TextInput extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final bool autocorrect;
+  final FocusNode focusNode;
+  final TextInputAction textInputAction;
   final Function(String) onChanged;
+  final Function(String) onSubmitted;
   final TextInputType keyboardType;
   final String placeholder;
   final Widget suffixIcon;
@@ -18,7 +21,10 @@ class TextInput extends StatelessWidget {
     this.controller,
     this.obscureText = false,
     this.autocorrect = false,
+    this.focusNode,
+    this.textInputAction,
     this.onChanged,
+    this.onSubmitted,
     this.keyboardType,
     this.placeholder,
     this.suffixIcon,
@@ -33,9 +39,12 @@ class TextInput extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         autocorrect: autocorrect,
+        focusNode: focusNode,
+        textInputAction: textInputAction,
         onChanged: onChanged,
         keyboardType: keyboardType,
         style: TextStyle(color: appearance.text.primary),
+        onSubmitted: onSubmitted,
         decoration: InputDecoration(
           labelText: placeholder,
           filled: true,
