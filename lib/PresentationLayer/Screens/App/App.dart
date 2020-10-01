@@ -5,7 +5,7 @@ import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/LoadingScreen.dart';
-import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/SignInScreen.dart';
+import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Screen/SignInScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:flutter/material.dart';
 

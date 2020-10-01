@@ -1,5 +1,6 @@
 
 import 'package:chat_app/DataLayer/Networking/Base/FirestoreWebAPIWorker.dart';
+import 'package:chat_app/ModelLayer/Business/Exceptions/NothingFoundException.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/ModelLayer/Business/User/UserJSONConverter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,13 @@ class SignInWebAPIWorker extends FirestoreWebAPIWorker {
         .then((value) {
           final json = value.docs.first.data();
           return _userJSONConverter.toUser(json);
+        })
+        .catchError((error) {
+          if (error is StateError && error.message == 'No element') {
+            throw NothingFoundException(error.message);
+          } else {
+            throw error;
+          }
         });
   }
 }
