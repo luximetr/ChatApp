@@ -6,8 +6,9 @@ class Appearance {
   TextAppearance text;
   NavigationAppearance navigation;
   ButtonAppearanceType button;
+  AlertAppearance alert;
 
-  Appearance({this.background, this.text, this.navigation, this.button});
+  Appearance({this.background, this.text, this.navigation, this.button, this.alert});
 }
 
 class BackgroundAppearance {
@@ -51,3 +52,11 @@ class ButtonAppearanceType {
   ButtonAppearanceType({this.primary, this.secondary, this.tertiary});
 }
 
+class AlertAppearance {
+  Color background;
+  Color title;
+  Color primaryAction;
+  Color secondaryAction;
+
+  AlertAppearance({this.background, this.title, this.primaryAction, this.secondaryAction});
+}

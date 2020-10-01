@@ -35,10 +35,16 @@ class AppearancesFactory {
         tertiary: ButtonAppearance(
           background: Colors.transparent,
           title: Color.fromRGBO(200, 208, 201, 1),
-        )
+        ),
       ),
       navigation: NavigationAppearance(
         background: Color.fromRGBO(41, 47, 67, 1)
+      ),
+      alert: AlertAppearance(
+        background: Color.fromRGBO(69, 83, 121, 1),
+        title: Color.fromRGBO(196, 200, 211, 1),
+        primaryAction: Color.fromRGBO(225, 225, 225, 1),
+        secondaryAction: Color.fromRGBO(180, 188, 198, 1),
       )
     );
   }

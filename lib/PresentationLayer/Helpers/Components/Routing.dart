@@ -31,6 +31,14 @@ class Routing {
     pushAndRemoveUntil(context: context, targetScreen: targetScreen, removeUntil: '/');
   }
 
+  static void pushReplacement({
+    @required BuildContext context,
+    @required NamedRoute targetScreen,
+  }) {
+    final route = _createNamedMaterialPageRoute(targetScreen);
+    Navigator.of(context).pushReplacement(route);
+  }
+
   static void popUntil({
     @required BuildContext context,
     @required String removeUntil,
@@ -42,5 +50,11 @@ class Routing {
     @required BuildContext context
   }) {
     popUntil(context: context, removeUntil: '/');
+  }
+
+  // Private
+  static Route<dynamic> _createNamedMaterialPageRoute(NamedRoute targetScreen) {
+    final routeSettings = RouteSettings(name: targetScreen.routeName);
+    return MaterialPageRoute(builder: (context) => targetScreen, settings: routeSettings);
   }
 }
