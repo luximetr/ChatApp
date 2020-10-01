@@ -8,7 +8,7 @@ import 'package:chat_app/PresentationLayer/Helpers/Components/Routing.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Helpers/SignInScreenFormErrors.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Helpers/SignInScreenFormValidator.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Screen/SignInScreenView.dart';
-import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/SignUpScreen.dart';
+import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Screen/SignUpScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
