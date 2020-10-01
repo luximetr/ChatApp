@@ -1,7 +1,6 @@
 import 'package:chat_app/ApplicationLayer/Services/Auth/SignOutService.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/Routing.dart';
-import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Screen/SignInScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Profile/Helpers/ConfirmLogoutDialogBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Profile/Screen/ProfileScreenView.dart';

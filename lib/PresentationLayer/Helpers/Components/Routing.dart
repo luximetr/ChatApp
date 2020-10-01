@@ -36,7 +36,7 @@ class Routing {
     @required NamedRoute targetScreen,
   }) {
     final route = _createNamedMaterialPageRoute(targetScreen);
-    Navigator.of(context).pushReplacement(route);
+    Navigator.of(context).pushAndRemoveUntil(route, (route) => false);
   }
 
   static void popUntil({

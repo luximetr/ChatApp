@@ -26,14 +26,14 @@ class ConfirmLogoutDialogBuilder {
 
   Widget _buildTitle() {
     return Text(
-      'My title',
+      'Logout',
       style: TextStyle(color: appearance.alert.title)
     );
   }
 
   Widget _buildContent() {
     return Text(
-      'This is my message',
+      'Are you sure you want to logout?',
       style: TextStyle(color: appearance.alert.title)
     );
   }

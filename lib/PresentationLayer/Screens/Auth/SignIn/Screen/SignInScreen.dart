@@ -2,7 +2,9 @@
 import 'package:chat_app/ApplicationLayer/Services/Auth/SignInService.dart';
 import 'package:chat_app/ModelLayer/Business/Exceptions/NothingFoundException.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/LoaderBuilder.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/Routing.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Helpers/SignInScreenFormErrors.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Helpers/SignInScreenFormValidator.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignIn/Screen/SignInScreenView.dart';
@@ -42,10 +44,12 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   void _signIn(String login, String password, BuildContext context) {
+    LoaderBuilder.show(context);
     _signInService
         .signIn(login: login, password: password)
         .then((user) => navigateToChatList(context, user))
-        .catchError(_handleSignInError);
+        .catchError(_handleSignInError)
+        .whenComplete(() => LoaderBuilder.hide());
   }
 
   void _handleSignInError(error) {
@@ -92,10 +96,7 @@ class SignInScreenState extends State<SignInScreen> {
   }
 
   void navigateToChatList(BuildContext context, User user) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-          builder: (context) => ChatListScreen(user: user,)
-      )
-    );
+    final targetScreen = ChatListScreen(user: user);
+    Routing.pushReplacement(context: context, targetScreen: targetScreen);
   }
 }
