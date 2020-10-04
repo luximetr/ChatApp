@@ -2,6 +2,7 @@
 import 'package:chat_app/ApplicationLayer/Services/Start/InitAppService.dart';
 import 'package:chat_app/ApplicationLayer/Services/User/CurrentUserService.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/LoadingScreen.dart';
@@ -31,14 +32,10 @@ class _AppState extends State<App> {
     try {
       await _initAppService.initialize();
       _currentUser = await _currentUserService.getCachedCurrentUser();
-      setState(() {
-        _initialized = true;
-      });
+      setState(() { _initialized = true; });
     } catch(error) {
       print('Init app error: $error');
-      setState(() {
-        _initialized = false;
-      });
+      setState(() { _initialized = false; });
     }
   }
 
@@ -51,11 +48,10 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Startup Name Generator',
+      title: 'ChatApp',
       theme: ThemeData(
           backgroundColor: appearance.background.primary
       ),
-      initialRoute: '/',
       home: _buildStartScreen(),
     );
   }

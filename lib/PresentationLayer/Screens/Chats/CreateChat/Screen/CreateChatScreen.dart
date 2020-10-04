@@ -5,6 +5,7 @@ import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/Routing.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreen.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/ChatList/Screen/ChatListScreen.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/CreateChat/Screen/CreateChatScreenView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -111,6 +112,6 @@ class CreateChatScreenState extends State<CreateChatScreen> {
   // Open chat
   void _navigateToChat(BuildContext context, Chat chat) {
     final targetScreen = ChatScreen(chat: chat, currentUser: widget.currentUser);
-    Routing.pushAndRemoveUntilRoot(context: context, targetScreen: targetScreen);
+    Routing.pushAndRemoveUntil(context: context, targetScreen: targetScreen, removeUntil: ChatListScreen.routeNameStatic);
   }
 }

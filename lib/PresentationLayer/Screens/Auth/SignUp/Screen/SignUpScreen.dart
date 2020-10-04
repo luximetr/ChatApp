@@ -3,6 +3,7 @@ import 'package:chat_app/ApplicationLayer/Services/Auth/SignUpService.dart';
 import 'package:chat_app/ModelLayer/Business/Exceptions/AlreadyExistException.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/LoaderBuilder.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/Routing.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Helpers/SignUpScreenForm.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Helpers/SignUpScreenFormErrors.dart';
 import 'package:chat_app/PresentationLayer/Screens/Auth/SignUp/Helpers/SignUpScreenFormValidator.dart';
@@ -74,11 +75,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   // Navigate to chat list
   void navigateToChatList(BuildContext context, User user) {
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => ChatListScreen(user: user)
-        ),
-        (Route<dynamic> route) => false
-    );
+    final targetScreen = ChatListScreen(user: user);
+    Routing.pushReplacementAll(context: context, targetScreen: targetScreen);
   }
 }

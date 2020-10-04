@@ -5,7 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget with NamedRoute {
-  @override final String routeName = '/loading';
+  static String routeNameStatic = '/loading';
+  @override final String routeName = routeNameStatic;
 
   @override
   Widget build(BuildContext context) {

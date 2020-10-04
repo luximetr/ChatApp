@@ -14,7 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignInScreen extends StatefulWidget with NamedRoute {
-  @override final String routeName = '/sign_in';
+  static String routeNameStatic = '/sign_in';
+  @override final String routeName = routeNameStatic;
 
   @override
   State<StatefulWidget> createState() => SignInScreenState();

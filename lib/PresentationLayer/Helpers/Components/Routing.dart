@@ -21,17 +21,27 @@ class Routing {
   }) {
     final routeSettings = RouteSettings(name: targetScreen.routeName);
     final route = MaterialPageRoute(builder: (context) => targetScreen, settings: routeSettings);
-    Navigator.of(context).pushAndRemoveUntil(route, ModalRoute.withName(removeUntil));
+    Navigator.of(context).pushAndRemoveUntil(route, (_route) {
+      return ModalRoute.withName(removeUntil)(_route) || _route.isFirst;
+    });
   }
 
   static void pushAndRemoveUntilRoot({
     @required BuildContext context,
     @required NamedRoute targetScreen,
   }) {
-    pushAndRemoveUntil(context: context, targetScreen: targetScreen, removeUntil: '/');
+    pushAndRemoveUntil(context: context, targetScreen: targetScreen, removeUntil: Navigator.defaultRouteName);
   }
 
   static void pushReplacement({
+    @required BuildContext context,
+    @required NamedRoute targetScreen,
+  }) {
+    final route = _createNamedMaterialPageRoute(targetScreen);
+    Navigator.of(context).pushReplacement(route);
+  }
+
+  static void pushReplacementAll({
     @required BuildContext context,
     @required NamedRoute targetScreen,
   }) {
@@ -49,7 +59,7 @@ class Routing {
   static void popToRoot({
     @required BuildContext context
   }) {
-    popUntil(context: context, removeUntil: '/');
+    popUntil(context: context, removeUntil: Navigator.defaultRouteName);
   }
 
   // Private
