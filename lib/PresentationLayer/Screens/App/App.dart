@@ -2,7 +2,6 @@
 import 'package:chat_app/ApplicationLayer/Services/Start/InitAppService.dart';
 import 'package:chat_app/ApplicationLayer/Services/User/CurrentUserService.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
-import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearanceType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Model/Appearance/AppearancesFactory.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/LoadingScreen.dart';
@@ -49,6 +48,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ChatApp',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           backgroundColor: appearance.background.primary
       ),
