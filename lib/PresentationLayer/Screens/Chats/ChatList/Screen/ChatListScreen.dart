@@ -1,6 +1,5 @@
 
 import 'dart:async';
-
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatListService.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
 import 'package:chat_app/ModelLayer/Business/ChatListEvent/ChatListEvent.dart';
@@ -136,7 +135,7 @@ class ChatListScreenState extends State<ChatListScreen> {
   
   void _handleChatListEventCreated(Chat chat) {
     final index = _findChatIndex(chat.id);
-    if (index != null) { return; }
+    if (index != -1) { return; }
     setState(() {
       _chats.insert(0, chat);
     });
@@ -144,7 +143,7 @@ class ChatListScreenState extends State<ChatListScreen> {
 
   void _handleChatListEventUpdated(Chat chat) {
     final index = _findChatIndex(chat.id);
-    if (index == null) { return; }
+    if (index == -1) { return; }
     setState(() {
       _chats[index] = chat;
     });
@@ -152,7 +151,7 @@ class ChatListScreenState extends State<ChatListScreen> {
   
   void _handleChatListEventDeleted(Chat chat) {
     final index = _findChatIndex(chat.id);
-    if (index == null) { return; }
+    if (index == -1) { return; }
     setState(() {
       _chats.removeAt(index);
     });
