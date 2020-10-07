@@ -41,6 +41,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145608126518:android:77f76492038c72c05a2897",
+        "android_client_info": {
+          "package_name": "com.sync.luximetr.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145608126518-rk4or8qd6fukuv0u4vkg2v6pgleevgfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgFrUT_6HQV5AzOurP_iq_E8KvZ0MqfNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145608126518-rk4or8qd6fukuv0u4vkg2v6pgleevgfc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145608126518-ne4iis00c9uko1rrhttkv8rd7r6dbima.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sync.luximetr.chatapp"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

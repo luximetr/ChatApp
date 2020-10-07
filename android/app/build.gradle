@@ -46,7 +46,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.sync.luximetr.chat_app"
+        applicationId "com.sync.luximetr.chatapp"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
