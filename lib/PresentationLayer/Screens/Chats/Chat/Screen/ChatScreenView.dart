@@ -68,7 +68,7 @@ class ChatScreenViewState extends State<ChatScreenView> {
         child: Column(
           children: [
             _buildMessagesListView(),
-            _buildInputMessageView(),
+            widget.chat.isBlocked ? _buildBlockedInputMessageView() : _buildInputMessageView(),
           ],
         ),
       ),
@@ -122,9 +122,19 @@ class ChatScreenViewState extends State<ChatScreenView> {
     );
   }
 
+  // Input message view
   Widget _buildInputMessageView() {
     return InputMessageView(
       onTapSend: (text) { widget.onSendTap(text); },
+    );
+  }
+
+  // Blocked input message view
+  Widget _buildBlockedInputMessageView() {
+    return Container(
+      height: 50,
+      alignment: Alignment.center,
+      child: Text('Blocked', style: TextStyle(fontSize: 18, color: appearance.text.secondary)),
     );
   }
 }

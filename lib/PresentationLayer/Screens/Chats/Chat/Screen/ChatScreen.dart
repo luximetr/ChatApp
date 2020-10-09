@@ -13,6 +13,7 @@ import 'package:chat_app/ModelLayer/Business/Message/Message.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/ModelLayer/Common/RemoteDBEvent/RemoteDBEventType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/ToastBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/ChatOptionsActionsSheetBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageDateFormatter.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
@@ -106,6 +107,8 @@ class ChatScreenState extends State<ChatScreen> {
   
   void _handleChatUpdate(Chat updatedChat) {
     setState(() {
+      print('Chat updated ${updatedChat.isBlocked}');
+      print('Chat updated ${updatedChat.isBlockedByYou}');
       _chat = updatedChat;
     });
   }
@@ -243,16 +246,25 @@ class ChatScreenState extends State<ChatScreen> {
   void _onMoreTap(BuildContext context) {
     ChatOptionsActionsSheetBuilder.show(
       context,
-      onBlockTap: () {
-        _blockChat();
-      });
+      isBlockedByYou: _chat.isBlockedByYou,
+      onBlockTap: () { _blockChat(context); },
+      onUnblockTap: () { _unblockChat(context); }
+    );
   }
 
   // Block user
-  void _blockChat() {
+  void _blockChat(BuildContext context) {
     _blockChatService
       .blockChat(_chat.id, widget.currentUser.id)
-      .then((result) => print('User blocked'))
-      .catchError((error) => print('Error $error'));
+      .then((result) => ToastBuilder.show(context, 'User blocked'))
+      .catchError((error) => ToastBuilder.show(context, 'Error $error'));
+  }
+
+  // Unblock user
+  void _unblockChat(BuildContext context) {
+    _blockChatService
+      .unblockChat(_chat.id, widget.currentUser.id)
+      .then((result) => ToastBuilder.show(context, 'User unblocked'))
+      .catchError((error) => ToastBuilder.show(context, 'Error $error'));
   }
 }
