@@ -17,6 +17,7 @@ class ChatScreenView extends StatefulWidget {
   final List<MessageViewModel> displayMessages;
   final MessageViewModelStatus Function(MessageViewModel message) getMessageStatusCallback;
   final VoidCallback onReachedScrollEnd;
+  final VoidCallback onMoreTap;
 
   ChatScreenView({
     @required this.chat,
@@ -24,6 +25,7 @@ class ChatScreenView extends StatefulWidget {
     @required this.displayMessages,
     @required this.getMessageStatusCallback,
     @required this.onReachedScrollEnd,
+    @required this.onMoreTap,
   });
 
   @override
@@ -35,12 +37,31 @@ class ChatScreenViewState extends State<ChatScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarBuilder.build(title: widget.chat.name),
+      appBar: _buildNavigationBar(),
       body: _buildBody(),
       backgroundColor: appearance.background.primary,
     );
   }
 
+  // Navigation bar
+  Widget _buildNavigationBar() {
+    return AppBarBuilder.build(
+      title: widget.chat.name,
+      trailing: _buildOptionsButton()
+    );
+  }
+
+  Widget _buildOptionsButton() {
+    return Container(
+      padding: EdgeInsets.only(right: 14),
+      child: GestureDetector(
+        child: Icon(Icons.more_vert),
+        onTap: () { widget.onMoreTap(); },
+      ),
+    );
+  }
+
+  // Body
   Widget _buildBody() {
     return Container(
       child: SafeArea(

@@ -22,6 +22,7 @@ class AppearancesFactory {
       text: TextAppearance(
         primary: Color.fromRGBO(176, 180, 191, 1),
         secondary: Color.fromRGBO(90, 98, 108, 1),
+        disruptive: Color.fromRGBO(250, 60, 60, 1),
       ),
       button: ButtonAppearanceType(
         primary: ButtonAppearance(

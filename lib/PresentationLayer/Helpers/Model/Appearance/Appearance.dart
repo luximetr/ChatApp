@@ -24,8 +24,9 @@ class BackgroundAppearance {
 class TextAppearance {
   Color primary;
   Color secondary;
+  Color disruptive;
 
-  TextAppearance({this.primary, this.secondary});
+  TextAppearance({this.primary, this.secondary, this.disruptive});
 }
 
 class NavigationAppearance {

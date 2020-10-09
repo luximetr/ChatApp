@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'package:chat_app/ApplicationLayer/Services/Chat/BlockChatService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatListService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatMessageEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/GetMessagesHistoryService.dart';
@@ -12,11 +13,13 @@ import 'package:chat_app/ModelLayer/Business/Message/Message.dart';
 import 'package:chat_app/ModelLayer/Business/User/User.dart';
 import 'package:chat_app/ModelLayer/Common/RemoteDBEvent/RemoteDBEventType.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/ChatOptionsActionsSheetBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageDateFormatter.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModelStatus.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreenView.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget with NamedRoute {
   @override final String routeName = '/chat';
@@ -39,6 +42,7 @@ class ChatScreenState extends State<ChatScreen> {
   StreamSubscription<Chat> _chatUpdatesSubscription;
   final _updateChatLastReadMessageService = UpdateChatLastReadMessageService();
   final _getMessagesHistoryService = GetMessagesHistoryService();
+  final _blockChatService = BlockChatService();
 
   final _messageDateFormatter = MessageDateFormatter();
   final _dateCalculator = DateCalculator();
@@ -57,6 +61,7 @@ class ChatScreenState extends State<ChatScreen> {
       displayMessages: _displayMessages,
       getMessageStatusCallback: (messageVM) => _getMessageViewModelStatus(messageVM.message),
       onReachedScrollEnd: _onReachedScrollEnd,
+      onMoreTap: () { _onMoreTap(context); },
     );
   }
 
@@ -232,5 +237,22 @@ class ChatScreenState extends State<ChatScreen> {
     if (messages.isNotEmpty) {
       _markMessageAsReadIfNeeded(messages.first);
     }
+  }
+
+  // Options
+  void _onMoreTap(BuildContext context) {
+    ChatOptionsActionsSheetBuilder.show(
+      context,
+      onBlockTap: () {
+        _blockChat();
+      });
+  }
+
+  // Block user
+  void _blockChat() {
+    _blockChatService
+      .blockChat(_chat.id, widget.currentUser.id)
+      .then((result) => print('User blocked'))
+      .catchError((error) => print('Error $error'));
   }
 }
