@@ -13,7 +13,7 @@ class GetMessagesHistoryWebAPIWorker extends FirestoreWebAPIWorker {
     _chatsCollectionReference = firestore.collection('chats');
   }
 
-  Future<List<Message>> getMessagesHistory(String chatId, String startAfterMessageId, int limit) async {
+  Future<List<Message>> getMessagesHistory(String chatId, String currentUserId, String startAfterMessageId, int limit) async {
     final chatDocument = _chatsCollectionReference.doc(chatId);
     final messagesCollection = chatDocument.collection('messages');
 
@@ -33,7 +33,7 @@ class GetMessagesHistoryWebAPIWorker extends FirestoreWebAPIWorker {
       .then((snapshot) {
         return snapshot.docs.map((doc) {
           final json = doc.data();
-          return _messageJSONConverter.toMessage(json);
+          return _messageJSONConverter.toMessage(json, currentUserId);
         }).toList();
       });
   }

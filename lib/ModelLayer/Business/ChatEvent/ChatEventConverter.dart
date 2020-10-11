@@ -9,8 +9,9 @@ class ChatEventConverter {
   final _messageJSONConverter = MessageJSONConverter();
   final _typeConverter = RemoteDBEventTypeConverter();
 
-  ChatEvent toChatEvent(DocumentChange documentChange) {
-    final message = _messageJSONConverter.toMessage(documentChange.doc.data());
+  ChatEvent toChatEvent(DocumentChange documentChange, String currentUserId) {
+    final json = documentChange.doc.data();
+    final message = _messageJSONConverter.toMessage(json, currentUserId);
     final type = _typeConverter.toEventType(documentChange.type);
 
     return ChatEvent(

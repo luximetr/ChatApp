@@ -1,10 +1,11 @@
 
 import 'dart:async';
 import 'package:chat_app/ApplicationLayer/Services/Chat/BlockChatService.dart';
+import 'package:chat_app/ApplicationLayer/Services/Chat/BlockMessageService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatListService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/ChatMessageEventsService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/GetMessagesHistoryService.dart';
-import 'package:chat_app/ApplicationLayer/Services/Chat/SendMessageService.dart';
+import 'package:chat_app/ApplicationLayer/Services/Chat/MessagingService.dart';
 import 'package:chat_app/ApplicationLayer/Services/Chat/UpdateChatLastReadMessageService.dart';
 import 'package:chat_app/DataLayer/Calculation/DateCalculator.dart';
 import 'package:chat_app/ModelLayer/Business/Chat/Chat.dart';
@@ -16,6 +17,7 @@ import 'package:chat_app/PresentationLayer/Helpers/Components/NamedRoute.dart';
 import 'package:chat_app/PresentationLayer/Helpers/Components/ToastBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/ChatOptionsActionsSheetBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageDateFormatter.dart';
+import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/ReceivedMessageOptionsActionsSheetBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModel.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Helpers/MessageViewModelStatus.dart';
 import 'package:chat_app/PresentationLayer/Screens/Chats/Chat/Screen/ChatScreenView.dart';
@@ -37,13 +39,14 @@ class ChatScreen extends StatefulWidget with NamedRoute {
 class ChatScreenState extends State<ChatScreen> {
 
   // Dependencies
-  final _sendMessageService = SendMessageService();
+  final _messagingService = MessagingService();
   final _chatMessageEventsService = ChatMessageEventsService();
   final _chatUpdatesService = ChatListService();
   StreamSubscription<Chat> _chatUpdatesSubscription;
   final _updateChatLastReadMessageService = UpdateChatLastReadMessageService();
   final _getMessagesHistoryService = GetMessagesHistoryService();
   final _blockChatService = BlockChatService();
+  final _blockMessageService = BlockMessageService();
 
   final _messageDateFormatter = MessageDateFormatter();
   final _dateCalculator = DateCalculator();
@@ -63,6 +66,7 @@ class ChatScreenState extends State<ChatScreen> {
       getMessageStatusCallback: (messageVM) => _getMessageViewModelStatus(messageVM.message),
       onReachedScrollEnd: _onReachedScrollEnd,
       onMoreTap: () { _onMoreTap(context); },
+      onReceivedMessageLongPress: (message) => _onReceivedMessageLongPress(context, message),
     );
   }
 
@@ -89,7 +93,7 @@ class ChatScreenState extends State<ChatScreen> {
   // Send message
   void _onSendTap(String text) {
     if (text.isEmpty) { return; }
-    _sendMessageService
+    _messagingService
         .sendMessage(widget.chat.id, text)
         .catchError((error) => print(error));
   }
@@ -107,8 +111,6 @@ class ChatScreenState extends State<ChatScreen> {
   
   void _handleChatUpdate(Chat updatedChat) {
     setState(() {
-      print('Chat updated ${updatedChat.isBlocked}');
-      print('Chat updated ${updatedChat.isBlockedByYou}');
       _chat = updatedChat;
     });
   }
@@ -116,7 +118,7 @@ class ChatScreenState extends State<ChatScreen> {
   // Chat message events
   void _startListenChatMessageEvents() {
     _chatMessageEventsService
-        .startListenChatMessageEvents(widget.chat.id)
+        .startListenChatMessageEvents(widget.chat.id, widget.currentUser.id)
         .listen((event) => _handleChatMessageEvent(event))
         .onError((error) => print('Error: $error'));
   }
@@ -141,17 +143,25 @@ class ChatScreenState extends State<ChatScreen> {
 
   // Message created
   void _handleMessageCreated(Message message) {
+    if (_isMessageAlreadyDisplaying(message.id)) {
+      _handleMessageModified(message);
+    } else {
+      _displayMessageCreated(message);
+      _markMessageAsReadIfNeeded(message);
+    }
+  }
+
+  void _displayMessageCreated(Message message) {
     final viewModel = _createMessageViewModel(message);
     setState(() {
       _displayMessages.insert(0, viewModel);
     });
-    _markMessageAsReadIfNeeded(message);
   }
 
   // Message modified
   void _handleMessageModified(Message message) {
     final index = _findMessageViewModelIndex(message.id);
-    if (index == null) { return; }
+    if (index == -1) { return; }
     final viewModel = _createMessageViewModel(message);
     setState(() {
       _displayMessages[index] = viewModel;
@@ -161,7 +171,7 @@ class ChatScreenState extends State<ChatScreen> {
   // Message removed
   void _handleMessageRemoved(Message message) {
     final index = _findMessageViewModelIndex(message.id);
-    if (index == null) { return; }
+    if (index == -1) { return; }
     setState(() {
       _displayMessages.removeAt(index);
     });
@@ -201,9 +211,44 @@ class ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  // Message actions
+  void _onReceivedMessageLongPress(BuildContext context, MessageViewModel message) {
+    ReceivedMessageOptionsActionsSheetBuilder.show(
+      context,
+      isBlocked: message.message.isBlockedForYou,
+      onBlock: () { _blockReceivedMessage(message.message); },
+      onUnblock: () { _unblockReceivedMessage(message.message); },
+      onReport: () { _reportReceivedMessage(message.message); }
+    );
+  }
+
+  void _blockReceivedMessage(Message message) {
+    _blockMessageService
+      .blockMessage(_chat.id, message.id, widget.currentUser.id)
+      .then((value) {})
+      .catchError((error) => print('Message block error $error'));
+  }
+
+  void _unblockReceivedMessage(Message message) {
+    _blockMessageService
+      .unblockMessage(_chat.id, message.id, widget.currentUser.id)
+      .then((value) {})
+      .catchError((error) => print('Message unblock error $error'));
+
+  }
+
+  void _reportReceivedMessage(Message message) {
+
+  }
+
   // Find message
   int _findMessageViewModelIndex(String messageId) {
     return _displayMessages.indexWhere((element) => element.message.id == messageId);
+  }
+
+  bool _isMessageAlreadyDisplaying(String messageId) {
+    final index = _findMessageViewModelIndex(messageId);
+    return index != -1;
   }
 
   // History
@@ -212,7 +257,7 @@ class ChatScreenState extends State<ChatScreen> {
     final startAfterMessageId = _getLastHistoryMessageId();
     _isLoadingHistory = true;
     _getMessagesHistoryService
-        .getMessagesHistory(_chat.id, startAfterMessageId)
+        .getMessagesHistory(_chat.id, widget.currentUser.id, startAfterMessageId)
         .then((messages) {
           _isLoadingHistory = false;
           _displayMessagesHistory(messages);

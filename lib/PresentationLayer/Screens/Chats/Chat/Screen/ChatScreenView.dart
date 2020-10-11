@@ -18,6 +18,7 @@ class ChatScreenView extends StatefulWidget {
   final MessageViewModelStatus Function(MessageViewModel message) getMessageStatusCallback;
   final VoidCallback onReachedScrollEnd;
   final VoidCallback onMoreTap;
+  final Function (MessageViewModel message) onReceivedMessageLongPress;
 
   ChatScreenView({
     @required this.chat,
@@ -26,6 +27,7 @@ class ChatScreenView extends StatefulWidget {
     @required this.getMessageStatusCallback,
     @required this.onReachedScrollEnd,
     @required this.onMoreTap,
+    @required this.onReceivedMessageLongPress,
   });
 
   @override
@@ -119,6 +121,8 @@ class ChatScreenViewState extends State<ChatScreenView> {
     return ReceivedMessageView(
       text: message.text,
       time: message.time,
+      isBlocked: message.message.isBlockedForYou,
+      onLongPress: () { widget.onReceivedMessageLongPress(message); },
     );
   }
 

@@ -6,8 +6,8 @@ class ChatMessageEventsService {
   
   final _chatMessageEventsWebAPIWorker = ChatMessageEventsWebAPIWorker();
 
-  Stream<ChatEvent> startListenChatMessageEvents(String chatId) {
-    return _chatMessageEventsWebAPIWorker.listenEvents(chatId);
+  Stream<ChatEvent> startListenChatMessageEvents(String chatId, String currentUserId) {
+    return _chatMessageEventsWebAPIWorker.listenEvents(chatId, currentUserId);
   }
 
   void stopListenChatMessageEvents() {

@@ -35,7 +35,12 @@ class CreateChatWebAPIWorker extends FirestoreWebAPIWorker {
         }
       };
       await newDocument.set(data);
-      return Chat(id: id, name: targetUser.name);
+      return Chat(
+        id: id,
+        name: targetUser.name,
+        isBlocked: false,
+        isBlockedByYou: false,
+      );
     }
   }
 }

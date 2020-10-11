@@ -1,4 +1,6 @@
 
+import 'package:chat_app/PresentationLayer/Helpers/Components/BottomActionsSheet/ActionsSheetItem.dart';
+import 'package:chat_app/PresentationLayer/Helpers/Components/BottomActionsSheet/BottomActionsSheetBuilder.dart';
 import 'package:chat_app/PresentationLayer/Screens/App/App.dart';
 import 'package:flutter/material.dart';
 
@@ -18,45 +20,29 @@ class ChatOptionsActionsSheetBuilder {
   }
 
   static Widget _buildSheet(BuildContext context, bool isBlocked, VoidCallback onBlockTap, VoidCallback onUnblockTap) {
-    return Container(
-      color: appearance.background.primary,
-      child: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(top: 10, bottom: 10),
-          child: Wrap(
-            children: [
-              isBlocked ?
-                _buildUnblockAction(context, onUnblockTap) :
-                _buildBlockAction(context, onBlockTap),
-            ],
-          )
-        )
-      ),
+    final actions = List<ActionsSheetItem>();
+    if (isBlocked) {
+      actions.add(_buildUnblockAction(onUnblockTap));
+    } else {
+      actions.add(_buildBlockAction(onBlockTap));
+    }
+
+    return BottomActionsSheetBuilder.buildSheet(context, actions);
+  }
+
+  static ActionsSheetItem _buildDisruptiveAction(String title, VoidCallback action) {
+    return ActionsSheetItem(
+        title: title,
+        color: appearance.text.disruptive,
+        action: action
     );
   }
 
-  static Widget _buildDisruptiveAction(BuildContext context, String title, VoidCallback action) {
-    return Container(
-      child: InkWell(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          alignment: Alignment.center,
-          child: Text(title, textAlign: TextAlign.center, style: TextStyle(color: appearance.text.disruptive, fontSize: 20)),
-        ),
-        onTap: () {
-          Navigator.pop(context);
-          action();
-        },
-      ),
-    );
+  static ActionsSheetItem _buildBlockAction(VoidCallback action) {
+    return _buildDisruptiveAction('Block user', action);
   }
 
-  static Widget _buildBlockAction(BuildContext context, VoidCallback action) {
-    return _buildDisruptiveAction(context, 'Block user', action);
-  }
-
-  static Widget _buildUnblockAction(BuildContext context, VoidCallback action) {
-    return _buildDisruptiveAction(context, 'Unblock user', action);
+  static ActionsSheetItem _buildUnblockAction(VoidCallback action) {
+    return _buildDisruptiveAction('Unblock user', action);
   }
 }

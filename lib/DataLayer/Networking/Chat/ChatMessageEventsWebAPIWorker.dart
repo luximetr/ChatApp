@@ -16,16 +16,19 @@ class ChatMessageEventsWebAPIWorker extends FirestoreWebAPIWorker {
     _chatsCollectionReference = firestore.collection('chats');
   }
 
-  Stream<ChatEvent> listenEvents(String chatId) {
+  Stream<ChatEvent> listenEvents(String chatId, String currentUserId) {
     final chatDocument = _chatsCollectionReference.doc(chatId);
     final messagesCollection = chatDocument.collection('messages');
 
-    _subscription = messagesCollection
-        .where('createdAt', isGreaterThan: DateTime.now())
+    var query = messagesCollection
+      .orderBy('updatedAt')
+      .where('updatedAt', isGreaterThan: new DateTime.now());
+
+    _subscription = query
         .snapshots()
         .listen((querySnapshot) {
           final chatEvents = querySnapshot.docChanges.map((docChange) {
-            return _eventsConverter.toChatEvent(docChange);
+            return _eventsConverter.toChatEvent(docChange, currentUserId);
           }).toList();
 
           chatEvents.forEach((chatEvent) {

@@ -6,8 +6,9 @@ class GetMessagesHistoryService {
 
   final _getMessagesHistoryWebAPIWorker = GetMessagesHistoryWebAPIWorker();
 
-  Future<List<Message>> getMessagesHistory(String chatId, String startAfterMessageId) async {
+  Future<List<Message>> getMessagesHistory(String chatId, String currentUserId, String startAfterMessageId) async {
     final limit = 25;
-    return _getMessagesHistoryWebAPIWorker.getMessagesHistory(chatId, startAfterMessageId, limit);
+    return _getMessagesHistoryWebAPIWorker
+        .getMessagesHistory(chatId, currentUserId, startAfterMessageId, limit);
   }
 }

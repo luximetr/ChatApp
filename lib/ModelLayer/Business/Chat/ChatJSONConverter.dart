@@ -15,9 +15,6 @@ class ChatJSONConverter {
     final isBlockedByYou = _fetchIsBlockedByYou(json, userId);
     final isBlocked = _fetchIsBlocked(json);
 
-    print('PARSE CHAT isBlockedByYou $isBlockedByYou');
-    print('PARSE CHAT isBlocked $isBlocked');
-
     return Chat(
       id: id,
       name: name ?? '',
